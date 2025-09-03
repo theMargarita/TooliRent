@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36414.22 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TooliRent", "TooliRent\TooliRent.csproj", "{108BCF8F-8EFD-4851-B379-B6CD4A2D8545}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TooliRent.WebAPI", "TooliRent\TooliRent.WebAPI.csproj", "{108BCF8F-8EFD-4851-B379-B6CD4A2D8545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{3CDEC4A0-EA3B-412B-9392-0D47448C87F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Application\Services.csproj", "{3CDEC4A0-EA3B-412B-9392-0D47448C87F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{996BCDB6-8CB2-4FFB-92E2-3A8DC7F1DAD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Core", "Domain\Domain.Core.csproj", "{996BCDB6-8CB2-4FFB-92E2-3A8DC7F1DAD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{E341A930-293E-46E0-88BC-963D7BCB3107}"
 EndProject
