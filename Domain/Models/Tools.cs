@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
     public class Tools
     {
@@ -16,8 +9,10 @@ namespace Infrastructure.Models
         public bool IsAvailable { get; set; } = true;
         public DateTime PurchaseDate { get; set; }
 
-        //navigation property
-        public ToolCategory Category { get; set; }
+        //foreign key
         public int CategoryId { get; set; }
+
+        //navigation property
+        public ToolCategory? Category { get; set; }
     }
 }
