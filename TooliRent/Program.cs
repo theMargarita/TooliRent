@@ -1,4 +1,7 @@
 
+using Infrastructure.Data;
+using Services.Mapping;
+
 namespace TooliRent
 {
     public class Program
@@ -8,11 +11,18 @@ namespace TooliRent
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            //builder.Services.AddDbContext<ToolContext>(options =>
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            //DI: repositories and services will be added here later
+            //builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
             var app = builder.Build();
 
