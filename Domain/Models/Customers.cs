@@ -1,10 +1,12 @@
 ﻿using Domain.Core.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
 {
     public class Customers //: IdentityUser 
     {
+        [Key]
         public int CustomerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
@@ -16,6 +18,6 @@ namespace Infrastructure.Models
         //public DateTime UpdatedAt { get; set; }
 
         //navigation property
-        public List<Rental> Rentals { get; set; } = new List<Rental>();
+        public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
     }
 }
