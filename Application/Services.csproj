@@ -8,11 +8,18 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
-    <Folder Include="Mapping\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Attributes\" />
     <Folder Include="Validators\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.Core.csproj" />
   </ItemGroup>
 
 </Project>
