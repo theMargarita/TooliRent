@@ -1,6 +1,5 @@
-
 using Infrastructure.Data;
-using Services.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace TooliRent
 {
@@ -11,8 +10,9 @@ namespace TooliRent
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            //builder.Services.AddDbContext<ToolContext>(options =>
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ToolContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                x => x.MigrationsAssembly("TooliRent.WebAPI")));
 
 
             builder.Services.AddControllers();
