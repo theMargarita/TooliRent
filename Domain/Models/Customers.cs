@@ -1,8 +1,9 @@
 ﻿using Domain.Core.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Infrastructure.Models
 {
-    public class Customers
+    public class Customers //: IdentityUser 
     {
         public int CustomerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
