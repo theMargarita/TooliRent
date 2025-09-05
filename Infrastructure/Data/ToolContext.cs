@@ -31,7 +31,12 @@ namespace Infrastructure.Data
                 c.Property(x => x.Email).HasMaxLength(255).IsRequired();
                 c.Property(x => x.PhoneNumber).IsRequired();
                 c.Property(x => x.Address).HasMaxLength(500);
+                c.HasIndex(x => x.Email).IsUnique();
 
+                //navigation relationship
+                c.HasMany(x => x.Rentals)
+                 .WithOne(r => r.Customer)
+                 .HasForeignKey(r => r.CustomerId);
             });
 
             modelBuilder.Entity<Tools>(t =>
@@ -41,13 +46,21 @@ namespace Infrastructure.Data
                 t.Property(x => x.Price).IsRequired();
                 t.Property(x => x.QuantityInStock).IsRequired();
 
-
+                //navigation relationship
+                t.HasOne(x => x.Category)
+                 .WithMany(c => c.Tools)
+                 .HasForeignKey(x => x.CategoryId);
             });
 
             modelBuilder.Entity<ToolCategory>(tc =>
             {
                 tc.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 tc.Property(x => x.Description).HasMaxLength(500);
+
+                //navigation relationship
+                tc.HasMany(x => x.Tools)
+                  .WithOne(t => t.Category)
+                  .HasForeignKey(t => t.CategoryId);
             });
 
             modelBuilder.Entity<Rental>(r =>
@@ -57,6 +70,11 @@ namespace Infrastructure.Data
                 r.Property(x => x.IsReturned).IsRequired();
                 r.Property(x => x.TotalQuantity).IsRequired();
                 r.Property(x => x.TotalPrice).IsRequired();
+
+                //navigation relationship
+                r.HasOne(x => x.Customer)
+                 .WithMany(c => c.Rentals)
+                 .HasForeignKey(x => x.CustomerId);
             });
 
             SeedData(modelBuilder);
