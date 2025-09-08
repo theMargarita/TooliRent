@@ -10,16 +10,16 @@ namespace Infrastructure.Data
         {
         }
 
-        public DbSet<Tools> Tools { get; set; }
+        public DbSet<Tool> Tools { get; set; }
         public DbSet<ToolCategory> ToolCategories { get; set; }
-        public DbSet<Customers> Customers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Rental> Rentals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Customers>(c =>
+            modelBuilder.Entity<Customer>(c =>
             {
                 c.HasKey(x => x.CustomerId);
                 c.Property(x => x.FirstName)
@@ -39,7 +39,7 @@ namespace Infrastructure.Data
                  .HasForeignKey(r => r.CustomerId);
             });
 
-            modelBuilder.Entity<Tools>(t =>
+            modelBuilder.Entity<Tool>(t =>
             {
                 t.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 t.Property(x => x.Description).HasMaxLength(300);
@@ -117,9 +117,9 @@ namespace Infrastructure.Data
             );
 
             // Seed data for your Tools class with QuantityInStock
-            modelBuilder.Entity<Tools>().HasData(
+            modelBuilder.Entity<Tool>().HasData(
                 // Power Tools (CategoryId = 1)
-                new Tools
+                new Tool
                 {
                     ToolId = 1,
                     Name = "Cordless Drill 18V",
@@ -128,7 +128,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 3,
                     CategoryId = 1
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 2,
                     Name = "Circular Saw 7.25\"",
@@ -137,7 +137,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 2,
                     CategoryId = 1
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 3,
                     Name = "Angle Grinder 4.5\"",
@@ -146,7 +146,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 4,
                     CategoryId = 1
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 4,
                     Name = "Jigsaw Variable Speed",
@@ -155,7 +155,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 0, // Out of stock
                     CategoryId = 1
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 5,
                     Name = "Impact Driver",
@@ -164,7 +164,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 5,
                     CategoryId = 1
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 6,
                     Name = "Orbital Sander",
@@ -175,7 +175,7 @@ namespace Infrastructure.Data
                 },
 
                 // Hand Tools (CategoryId = 2)
-                new Tools
+                new Tool
                 {
                     ToolId = 7,
                     Name = "Professional Hammer Set",
@@ -184,7 +184,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 6,
                     CategoryId = 2
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 8,
                     Name = "Socket Wrench Set",
@@ -193,7 +193,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 3,
                     CategoryId = 2
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 9,
                     Name = "Precision Screwdriver Set",
@@ -202,7 +202,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 8,
                     CategoryId = 2
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 10,
                     Name = "Professional Tool Box",
@@ -211,7 +211,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 2,
                     CategoryId = 2
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 11,
                     Name = "Adjustable Wrench Set",
@@ -222,7 +222,7 @@ namespace Infrastructure.Data
                 },
 
                 // Garden Tools (CategoryId = 3)
-                new Tools
+                new Tool
                 {
                     ToolId = 12,
                     Name = "Self-Propelled Lawn Mower",
@@ -231,7 +231,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 2,
                     CategoryId = 3
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 13,
                     Name = "Gas Leaf Blower",
@@ -240,7 +240,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 3,
                     CategoryId = 3
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 14,
                     Name = "Electric Hedge Trimmer",
@@ -249,7 +249,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 0, // Out of stock
                     CategoryId = 3
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 15,
                     Name = "Chainsaw 16\"",
@@ -258,7 +258,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 1,
                     CategoryId = 3
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 16,
                     Name = "String Trimmer",
@@ -269,7 +269,7 @@ namespace Infrastructure.Data
                 },
 
                 // Construction Tools (CategoryId = 4)
-                new Tools
+                new Tool
                 {
                     ToolId = 17,
                     Name = "Wet Tile Saw 7\"",
@@ -278,7 +278,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 1,
                     CategoryId = 4
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 18,
                     Name = "Portable Concrete Mixer",
@@ -287,7 +287,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 1,
                     CategoryId = 4
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 19,
                     Name = "Electric Jackhammer",
@@ -296,7 +296,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 0, // Out of stock
                     CategoryId = 4
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 20,
                     Name = "Floor Sander",
@@ -305,7 +305,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 1,
                     CategoryId = 4
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 21,
                     Name = "Reciprocating Saw",
@@ -316,7 +316,7 @@ namespace Infrastructure.Data
                 },
 
                 // Cleaning Equipment (CategoryId = 5)
-                new Tools
+                new Tool
                 {
                     ToolId = 22,
                     Name = "Electric Pressure Washer",
@@ -325,7 +325,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 2,
                     CategoryId = 5
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 23,
                     Name = "Professional Carpet Cleaner",
@@ -334,7 +334,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 1,
                     CategoryId = 5
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 24,
                     Name = "Shop Vacuum 16 Gallon",
@@ -343,7 +343,7 @@ namespace Infrastructure.Data
                     QuantityInStock = 4,
                     CategoryId = 5
                 },
-                new Tools
+                new Tool
                 {
                     ToolId = 25,
                     Name = "Floor Buffer",
