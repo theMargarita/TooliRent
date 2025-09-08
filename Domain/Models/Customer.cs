@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
 {
-    public class Customers //: IdentityUser 
+    public class Customer //: IdentityUser 
     {
         [Key]
         public int CustomerId { get; set; }
