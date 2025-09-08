@@ -4,16 +4,19 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace TooliRent.WebAPI.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ToolContext))]
-    partial class ToolContextModelSnapshot : ModelSnapshot
+    [Migration("20250908123005_SmallChangesWithName")]
+    partial class SmallChangesWithName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace TooliRent.WebAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
+            modelBuilder.Entity("Domain.Core.Models.Order", b =>
                 {
                     b.Property<int>("RentalId")
                         .ValueGeneratedOnAdd()
@@ -60,7 +63,7 @@ namespace TooliRent.WebAPI.Migrations
                     b.ToTable("Rentals");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Customers", b =>
+            modelBuilder.Entity("Infrastructure.Models.Customer", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
@@ -102,62 +105,7 @@ namespace TooliRent.WebAPI.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.ToolCategory", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("ToolCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            Description = "Electric and battery powered tools for construction and DIY projects",
-                            Name = "Power Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Description = "Manual tools and basic equipment",
-                            Name = "Hand Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Description = "Outdoor and gardening equipment for lawn and landscape maintenance",
-                            Name = "Garden Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 4,
-                            Description = "Heavy duty construction and renovation equipment",
-                            Name = "Construction Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 5,
-                            Description = "Professional cleaning tools and pressure washing equipment",
-                            Name = "Cleaning Equipment"
-                        });
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Tools", b =>
+            modelBuilder.Entity("Infrastructure.Models.Tool", b =>
                 {
                     b.Property<int>("ToolId")
                         .ValueGeneratedOnAdd()
@@ -418,15 +366,70 @@ namespace TooliRent.WebAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Customers", "Customer")
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("ToolCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            Description = "Electric and battery powered tools for construction and DIY projects",
+                            Name = "Power Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            Description = "Manual tools and basic equipment",
+                            Name = "Hand Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            Description = "Outdoor and gardening equipment for lawn and landscape maintenance",
+                            Name = "Garden Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            Description = "Heavy duty construction and renovation equipment",
+                            Name = "Construction Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            Description = "Professional cleaning tools and pressure washing equipment",
+                            Name = "Cleaning Equipment"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Core.Models.Order", b =>
+                {
+                    b.HasOne("Infrastructure.Models.Customer", "Customer")
                         .WithMany("Rentals")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Tools", "Tool")
+                    b.HasOne("Infrastructure.Models.Tool", "Tools")
                         .WithMany("Rentals")
                         .HasForeignKey("ToolId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -434,12 +437,12 @@ namespace TooliRent.WebAPI.Migrations
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Tool");
+                    b.Navigation("Tools");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Tools", b =>
+            modelBuilder.Entity("Infrastructure.Models.Tool", b =>
                 {
-                    b.HasOne("Infrastructure.Models.ToolCategory", "Category")
+                    b.HasOne("Infrastructure.Models.Category", "Category")
                         .WithMany("Tools")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -448,19 +451,19 @@ namespace TooliRent.WebAPI.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Customers", b =>
+            modelBuilder.Entity("Infrastructure.Models.Customer", b =>
                 {
                     b.Navigation("Rentals");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.ToolCategory", b =>
+            modelBuilder.Entity("Infrastructure.Models.Tool", b =>
+                {
+                    b.Navigation("Rentals");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
                     b.Navigation("Tools");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Tools", b =>
-                {
-                    b.Navigation("Rentals");
                 });
 #pragma warning restore 612, 618
         }

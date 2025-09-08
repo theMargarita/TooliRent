@@ -11,8 +11,7 @@ namespace TooliRent
 
             // Add services to the container.
             builder.Services.AddDbContext<ToolContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                x => x.MigrationsAssembly("TooliRent.WebAPI")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             builder.Services.AddControllers();

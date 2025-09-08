@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    public class ToolCategory
+    public class Category
     {
         [Key]
         public int CategoryId { get; set; }
@@ -10,6 +10,6 @@ namespace Infrastructure.Models
         public string Description { get; set; } = string.Empty;
 
         //navigation property
-        public ICollection<Tools> Tools { get; set; } = new List<Tools>();
+        public ICollection<Tool> Tools { get; set; } = new List<Tool>();
     }
 }
