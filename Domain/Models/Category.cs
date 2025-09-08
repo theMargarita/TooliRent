@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    public class ToolCategory
+    public class Category
     {
         [Key]
         public int CategoryId { get; set; }

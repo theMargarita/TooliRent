@@ -14,16 +14,17 @@ namespace Domain.Core.Models
         public int TotalQuantity { get; set; } = 0; //total quantity of tools rented in this transaction
 
         [Column(TypeName = "decimal(18,2)")]
-        //[Precision(18,2)]
         public decimal TotalPrice { get; set; } = 0m; 
 
 
         //foreign keys and navigation properties
-        public Customer? Customer { get; set; }
-        public int CustomerId { get; set; }
+        //public Customer? Customer { get; set; }
+        //public int CustomerId { get; set; }
 
-        public Tool? Tools { get; set; }
-        public int ToolId { get; set; }
+        //public Tool? Tools { get; set; }
+        //public int ToolId { get; set; }
 
+        public ICollection<RentalDetail> OrderDetails { get; set; } = new List<RentalDetail>();
+        
     }
 }
