@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
+            modelBuilder.Entity("Domain.Core.Models.Order", b =>
                 {
                     b.Property<int>("RentalId")
                         .ValueGeneratedOnAdd()
@@ -105,7 +105,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.ToolCategory", b =>
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -421,7 +421,7 @@ namespace Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
+            modelBuilder.Entity("Domain.Core.Models.Order", b =>
                 {
                     b.HasOne("Infrastructure.Models.Customers", "Customer")
                         .WithMany("Rentals")
@@ -442,7 +442,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Tools", b =>
                 {
-                    b.HasOne("Infrastructure.Models.ToolCategory", "Category")
+                    b.HasOne("Infrastructure.Models.Category", "Category")
                         .WithMany("Tools")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -456,7 +456,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Rentals");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.ToolCategory", b =>
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
                 {
                     b.Navigation("Tools");
                 });

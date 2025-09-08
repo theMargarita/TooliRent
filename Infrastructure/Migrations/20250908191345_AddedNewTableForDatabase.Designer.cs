@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ToolContext))]
-    [Migration("20250908123005_SmallChangesWithName")]
-    partial class SmallChangesWithName
+    [Migration("20250908191345_AddedNewTableForDatabase")]
+    partial class AddedNewTableForDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Core.Models.Order", b =>
+            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
                 {
                     b.Property<int>("RentalId")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,7 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RentalId"));
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsReturned")
@@ -45,7 +45,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ToolId")
+                    b.Property<int?>("ToolId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
@@ -61,6 +61,91 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ToolId");
 
                     b.ToTable("Rentals");
+                });
+
+            modelBuilder.Entity("Domain.Core.Models.RentalDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("PricePerDay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RentalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ToolId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RentalId");
+
+                    b.ToTable("RentalDetail");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("ToolCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            Description = "Electric and battery powered tools for construction and DIY projects",
+                            Name = "Power Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            Description = "Manual tools and basic equipment",
+                            Name = "Hand Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            Description = "Outdoor and gardening equipment for lawn and landscape maintenance",
+                            Name = "Garden Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            Description = "Heavy duty construction and renovation equipment",
+                            Name = "Construction Tools"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            Description = "Professional cleaning tools and pressure washing equipment",
+                            Name = "Cleaning Equipment"
+                        });
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Customer", b =>
@@ -126,7 +211,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("PricePerDay")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("QuantityInStock")
@@ -145,7 +230,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "Professional 18V cordless drill with two batteries and charger",
                             Name = "Cordless Drill 18V",
-                            Price = 15.99m,
+                            PricePerDay = 15.99m,
                             QuantityInStock = 3
                         },
                         new
@@ -154,7 +239,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "Heavy duty circular saw with carbide blade",
                             Name = "Circular Saw 7.25\"",
-                            Price = 22.50m,
+                            PricePerDay = 22.50m,
                             QuantityInStock = 2
                         },
                         new
@@ -163,7 +248,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "Compact angle grinder for cutting and grinding",
                             Name = "Angle Grinder 4.5\"",
-                            Price = 18.99m,
+                            PricePerDay = 18.99m,
                             QuantityInStock = 4
                         },
                         new
@@ -172,7 +257,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "Variable speed jigsaw with orbital action",
                             Name = "Jigsaw Variable Speed",
-                            Price = 16.75m,
+                            PricePerDay = 16.75m,
                             QuantityInStock = 0
                         },
                         new
@@ -181,7 +266,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "High torque impact driver with quick-change chuck",
                             Name = "Impact Driver",
-                            Price = 19.99m,
+                            PricePerDay = 19.99m,
                             QuantityInStock = 5
                         },
                         new
@@ -190,7 +275,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 1,
                             Description = "Random orbital sander with dust collection",
                             Name = "Orbital Sander",
-                            Price = 24.99m,
+                            PricePerDay = 24.99m,
                             QuantityInStock = 2
                         },
                         new
@@ -199,7 +284,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 2,
                             Description = "3-piece hammer set: claw, ball peen, and sledge",
                             Name = "Professional Hammer Set",
-                            Price = 8.50m,
+                            PricePerDay = 8.50m,
                             QuantityInStock = 6
                         },
                         new
@@ -208,7 +293,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 2,
                             Description = "42-piece metric and imperial socket set with ratchets",
                             Name = "Socket Wrench Set",
-                            Price = 12.99m,
+                            PricePerDay = 12.99m,
                             QuantityInStock = 3
                         },
                         new
@@ -217,7 +302,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 2,
                             Description = "20-piece precision screwdriver set with magnetic tips",
                             Name = "Precision Screwdriver Set",
-                            Price = 6.75m,
+                            PricePerDay = 6.75m,
                             QuantityInStock = 8
                         },
                         new
@@ -226,7 +311,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 2,
                             Description = "Large tool box with multiple compartments and wheels",
                             Name = "Professional Tool Box",
-                            Price = 14.50m,
+                            PricePerDay = 14.50m,
                             QuantityInStock = 2
                         },
                         new
@@ -235,7 +320,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 2,
                             Description = "4-piece adjustable wrench set (6\", 8\", 10\", 12\")",
                             Name = "Adjustable Wrench Set",
-                            Price = 9.99m,
+                            PricePerDay = 9.99m,
                             QuantityInStock = 4
                         },
                         new
@@ -244,7 +329,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 3,
                             Description = "21-inch self-propelled gas lawn mower with mulching capability",
                             Name = "Self-Propelled Lawn Mower",
-                            Price = 35.99m,
+                            PricePerDay = 35.99m,
                             QuantityInStock = 2
                         },
                         new
@@ -253,7 +338,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 3,
                             Description = "Powerful gas-powered leaf blower with variable speed",
                             Name = "Gas Leaf Blower",
-                            Price = 24.99m,
+                            PricePerDay = 24.99m,
                             QuantityInStock = 3
                         },
                         new
@@ -262,7 +347,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 3,
                             Description = "24-inch electric hedge trimmer with rotating handle",
                             Name = "Electric Hedge Trimmer",
-                            Price = 21.50m,
+                            PricePerDay = 21.50m,
                             QuantityInStock = 0
                         },
                         new
@@ -271,7 +356,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 3,
                             Description = "Professional 16-inch gas chainsaw with safety features",
                             Name = "Chainsaw 16\"",
-                            Price = 42.99m,
+                            PricePerDay = 42.99m,
                             QuantityInStock = 1
                         },
                         new
@@ -280,7 +365,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 3,
                             Description = "Gas-powered string trimmer with dual line head",
                             Name = "String Trimmer",
-                            Price = 28.75m,
+                            PricePerDay = 28.75m,
                             QuantityInStock = 3
                         },
                         new
@@ -289,7 +374,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 4,
                             Description = "Professional wet tile saw with diamond blade",
                             Name = "Wet Tile Saw 7\"",
-                            Price = 55.99m,
+                            PricePerDay = 55.99m,
                             QuantityInStock = 1
                         },
                         new
@@ -298,7 +383,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 4,
                             Description = "3.5 cubic feet portable concrete mixer",
                             Name = "Portable Concrete Mixer",
-                            Price = 68.50m,
+                            PricePerDay = 68.50m,
                             QuantityInStock = 1
                         },
                         new
@@ -307,7 +392,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 4,
                             Description = "35 lb electric demolition hammer with accessories",
                             Name = "Electric Jackhammer",
-                            Price = 89.99m,
+                            PricePerDay = 89.99m,
                             QuantityInStock = 0
                         },
                         new
@@ -316,7 +401,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 4,
                             Description = "Professional drum floor sander for hardwood floors",
                             Name = "Floor Sander",
-                            Price = 75.25m,
+                            PricePerDay = 75.25m,
                             QuantityInStock = 1
                         },
                         new
@@ -325,7 +410,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 4,
                             Description = "Heavy duty reciprocating saw with multiple blades",
                             Name = "Reciprocating Saw",
-                            Price = 32.99m,
+                            PricePerDay = 32.99m,
                             QuantityInStock = 2
                         },
                         new
@@ -334,7 +419,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 5,
                             Description = "3000 PSI electric pressure washer with multiple nozzles",
                             Name = "Electric Pressure Washer",
-                            Price = 45.99m,
+                            PricePerDay = 45.99m,
                             QuantityInStock = 2
                         },
                         new
@@ -343,7 +428,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 5,
                             Description = "Hot water extraction carpet cleaning machine",
                             Name = "Professional Carpet Cleaner",
-                            Price = 39.99m,
+                            PricePerDay = 39.99m,
                             QuantityInStock = 1
                         },
                         new
@@ -352,7 +437,7 @@ namespace Infrastructure.Migrations
                             CategoryId = 5,
                             Description = "16-gallon wet/dry shop vacuum with multiple attachments",
                             Name = "Shop Vacuum 16 Gallon",
-                            Price = 18.75m,
+                            PricePerDay = 18.75m,
                             QuantityInStock = 4
                         },
                         new
@@ -361,83 +446,29 @@ namespace Infrastructure.Migrations
                             CategoryId = 5,
                             Description = "20-inch floor buffer/polisher with pads",
                             Name = "Floor Buffer",
-                            Price = 52.50m,
+                            PricePerDay = 52.50m,
                             QuantityInStock = 1
                         });
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.Category", b =>
+            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("Infrastructure.Models.Customer", null)
+                        .WithMany("Rentals")
+                        .HasForeignKey("CustomerId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("ToolCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            CategoryId = 1,
-                            Description = "Electric and battery powered tools for construction and DIY projects",
-                            Name = "Power Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 2,
-                            Description = "Manual tools and basic equipment",
-                            Name = "Hand Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 3,
-                            Description = "Outdoor and gardening equipment for lawn and landscape maintenance",
-                            Name = "Garden Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 4,
-                            Description = "Heavy duty construction and renovation equipment",
-                            Name = "Construction Tools"
-                        },
-                        new
-                        {
-                            CategoryId = 5,
-                            Description = "Professional cleaning tools and pressure washing equipment",
-                            Name = "Cleaning Equipment"
-                        });
+                    b.HasOne("Infrastructure.Models.Tool", null)
+                        .WithMany("Rentals")
+                        .HasForeignKey("ToolId");
                 });
 
-            modelBuilder.Entity("Domain.Core.Models.Order", b =>
+            modelBuilder.Entity("Domain.Core.Models.RentalDetail", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Customer", "Customer")
-                        .WithMany("Rentals")
-                        .HasForeignKey("CustomerId")
+                    b.HasOne("Domain.Core.Models.Rental", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.Tool", "Tools")
-                        .WithMany("Rentals")
-                        .HasForeignKey("ToolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Tools");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Tool", b =>
@@ -451,6 +482,16 @@ namespace Infrastructure.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Domain.Core.Models.Rental", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.Category", b =>
+                {
+                    b.Navigation("Tools");
+                });
+
             modelBuilder.Entity("Infrastructure.Models.Customer", b =>
                 {
                     b.Navigation("Rentals");
@@ -459,11 +500,6 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Models.Tool", b =>
                 {
                     b.Navigation("Rentals");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Category", b =>
-                {
-                    b.Navigation("Tools");
                 });
 #pragma warning restore 612, 618
         }
