@@ -20,6 +20,7 @@ namespace TooliRent
             builder.Services.AddSwaggerGen();
 
             //DI: repositories and services will be added here later
+
             //builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
