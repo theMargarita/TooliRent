@@ -9,6 +9,7 @@ namespace Domain.Core.Models
         public int Id { get; set; } 
         public int RentalId { get; set; }
         public int ToolId { get; set; }
+        public int CustomerId { get; set; }
         public int Quantity { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
