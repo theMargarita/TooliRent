@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories
 {
     public class ToolRepository : Repository<Tool>, IToolRepository
     {
-        public ToolRepository(ToolContext context) : base(context)
+        public ToolRepository(ToolDbContext context) : base(context)
         {
         }
 

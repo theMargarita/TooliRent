@@ -12,7 +12,7 @@ namespace Infrastructure.Repositories
 {
     public class RentalRepository : Repository<Rental>, IRentalRepository
     {
-        public RentalRepository(ToolContext context) : base(context) 
+        public RentalRepository(ToolDbContext context) : base(context) 
         { }
         public async Task<IEnumerable<Rental>> GetActiveRentalsAsync() 
         {

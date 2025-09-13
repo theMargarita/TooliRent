@@ -7,10 +7,10 @@ namespace Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly ToolContext _context;
+        protected readonly ToolDbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public Repository(ToolContext context)
+        public Repository(ToolDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

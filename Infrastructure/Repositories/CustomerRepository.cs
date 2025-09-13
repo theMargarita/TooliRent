@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories
 {
     public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
-        public CustomerRepository(ToolContext context) : base(context)
+        public CustomerRepository(ToolDbContext context) : base(context)
         {
         }
         public async Task DeleteAsunc(int id)
