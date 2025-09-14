@@ -2,9 +2,11 @@ using Domain.Core.Core_Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Mapping;
+//using Services.Mapping;
 
 namespace TooliRent
 {
@@ -42,19 +44,19 @@ namespace TooliRent
             //CORS
 
             //Identity
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
-            {
-                option.Password.RequireDigit = true;
-                option.Password.RequireLowercase = true;
-                option.Password.RequireUppercase = true;
-                option.Password.RequireNonAlphanumeric = false;
-                option.Password.RequiredLength = 6;
-                option.User.RequireUniqueEmail = true;
-            })
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ToolDbContext>()
-                .AddSignInManager()
-                .AddDefaultTokenProviders();
+            //builder.Services.AddIdentity<IdentityUser, IdentityRole>(option =>
+            //{
+            //    option.Password.RequireDigit = true;
+            //    option.Password.RequireLowercase = true;
+            //    option.Password.RequireUppercase = true;
+            //    option.Password.RequireNonAlphanumeric = false;
+            //    option.Password.RequiredLength = 6;
+            //    option.User.RequireUniqueEmail = true;
+            //})
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<ToolDbContext>()
+            //    .AddSignInManager()
+            //    .AddDefaultTokenProviders();
 
 
             //Authentication JWT
