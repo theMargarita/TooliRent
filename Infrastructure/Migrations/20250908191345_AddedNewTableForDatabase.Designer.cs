@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(ToolContext))]
+    [DbContext(typeof(ToolDbContext))]
     [Migration("20250908191345_AddedNewTableForDatabase")]
     partial class AddedNewTableForDatabase
     {

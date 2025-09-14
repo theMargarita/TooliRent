@@ -1,12 +1,14 @@
 ﻿using Domain.Core.Models;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ToolContext : DbContext
+    public class ToolDbContext : IdentityDbContext<IdentityUser>
     {
-        public ToolContext(DbContextOptions<ToolContext> options) : base(options)
+        public ToolDbContext(DbContextOptions<ToolDbContext> options) : base(options)
         {
         }
 
@@ -18,6 +20,7 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            //configure entity properties and relationships using Fluent API
 
             modelBuilder.Entity<Customer>(c =>
             {
@@ -353,6 +356,22 @@ namespace Infrastructure.Data
                     CategoryId = 5
                 }
             );
+
+            //modelBuilder.Entity<Customer>().HasData(customers);
         }
+
+        //public override Task<int>SaveChangesAsync(CancellationToken cancellationToken = default)
+        //{
+        //    var entries = ChangeTracker.Entries()
+        //        .Where(e => e.Entity is Tool || e.Entity is Category || e.Entity is Customer || e.Entity is Rental)
+        //        .ToList();
+
+        //    foreach(var entry in entries)
+        //    {
+        //        ((BackingFieldAttribute)entry.Entity).UpdatedAt = DateTime.UtcNow;
+        //    }
+
+        //    return base.SaveChangesAsync(cancellationToken);
+        //}
     }
 }

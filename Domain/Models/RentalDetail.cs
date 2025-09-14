@@ -13,9 +13,9 @@ namespace Domain.Core.Models
         public int Quantity { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal PricePerDay { get; set; }
+        public decimal PricePerDay { get; set; } = 0m;
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; } = 0m;
     }
 }

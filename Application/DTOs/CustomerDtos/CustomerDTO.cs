@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs
+﻿namespace Services.DTOs.CustomerDtos
 {
     public record CustomerDTO
     {

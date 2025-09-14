@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs
+﻿namespace Services.DTOs.ToolDtos
 {
     public record ToolCategoryDTO
     {

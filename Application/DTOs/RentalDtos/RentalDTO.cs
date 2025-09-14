@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs
+﻿namespace Services.DTOs.RentalDtos
 {
     public record RentalDTO //detailed info for rental listings - combines customer and tool info - like a receipt?
     {
