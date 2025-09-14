@@ -1,11 +1,12 @@
 ﻿using Domain.Core.Models;
 using Infrastructure.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ToolDbContext : DbContext
+    public class ToolDbContext : IdentityDbContext<IdentityUser>
     {
         public ToolDbContext(DbContextOptions<ToolDbContext> options) : base(options)
         {
@@ -20,6 +21,7 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
             //configure entity properties and relationships using Fluent API
+
             modelBuilder.Entity<Customer>(c =>
             {
                 c.HasKey(x => x.CustomerId);
