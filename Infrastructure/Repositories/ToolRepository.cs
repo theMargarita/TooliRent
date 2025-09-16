@@ -49,9 +49,9 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet
                 .Include(t => t.Category)
-                .Where(t => t.Name.Contains(searchTerm) ||
-                            t.Description.Contains(searchTerm) ||
-                            t.Category.Name.Contains(searchTerm))
+                .Where(t => t.Name.Contains(searchTerm.ToLower()) ||
+                            t.Description.Contains(searchTerm.ToLower()) ||
+                            t.Category.Name.Contains(searchTerm.ToLower()))
                 .ToListAsync();
         }
     }
