@@ -16,14 +16,16 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public Task<IEnumerable<CategoryDto>> GetAllCategory()
+        public async Task<IEnumerable<CategoryDto>> GetAllCategory()
         {
-            throw new NotImplementedException();
+            var category = await _unitOfWork.Categories.GetAllAsync();
+            return _mapper.Map<IEnumerable<CategoryDto>>(category);
         }
 
         public Task<IEnumerable<CategoryReadDto>> GetCategoryById(int id)
         {
-            throw new NotImplementedException();
+            var category = _unitOfWork.Categories.GetByIdAsync(id);
+            return _mapper.Map<Task<IEnumerable<CategoryReadDto>>>(category);
         }
     }
 }
