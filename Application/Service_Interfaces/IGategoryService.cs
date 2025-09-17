@@ -1,5 +1,4 @@
 ﻿using Services.DTOs.CategoryDto;
-using Services.DTOs.RentalDtos;
 
 namespace Services.Service_Interfaces
 {
