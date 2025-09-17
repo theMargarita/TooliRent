@@ -12,9 +12,9 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<bool> ExistsAsync(string name)
+        public async Task<bool> ExistsAsync(string name, int id)
         {
-            return await _dbSet.AnyAsync(e => e.Name == name);
+            return await _dbSet.AnyAsync(e => e.Name == name || e.ToolId == id);
         }
 
         public async Task<IEnumerable<Tool>> GetAvailableToolsAsync()
@@ -28,7 +28,6 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet
                 .Include(t => t.Category)
-                .Include(t => t.Name)
                 .Where(t => t.Category.Name == category)
                 .ToListAsync();
         }
