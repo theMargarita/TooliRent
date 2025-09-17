@@ -10,7 +10,7 @@ namespace Domain.Core.Core_Interfaces
         Task<int> GetTotalToolsAsync();
         Task<IEnumerable<Tool>> GetToolsByCategoryAsync(string category);
         Task<IEnumerable<Tool>> GetToolsByPriceAsync(decimal minPrice, decimal maxPrice);
-        Task<bool>ExistsAsync(string name);
+        Task<bool>ExistsAsync(string name, int id);
 
     }
 }
