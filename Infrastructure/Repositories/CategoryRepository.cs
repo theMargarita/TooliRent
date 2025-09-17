@@ -11,7 +11,10 @@ namespace Infrastructure.Repositories
         public CategoryRepository(ToolDbContext context) : base(context)
         {
         }
-
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
         public async Task<IEnumerable<Category>> GetCategoriesWithToolsAsync(string toolName)
         {
             return await _dbSet
