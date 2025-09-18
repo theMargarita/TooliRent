@@ -75,15 +75,15 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(searchTool);
         }
 
-        public async Task<bool> UpdateToolAsync(ToolUpdateDto toolUpdateDto, int id)
+        public async Task<ToolDto> UpdateToolAsync(ToolUpdateDto toolUpdateDto, int id)
         {
             var toolToUpdate = await _unitOfWork.Tools.GetByIdAsync(id);
-            if (toolToUpdate is null) return false;
+            if (toolToUpdate is null) return null;
 
             _mapper.Map(toolUpdateDto, toolToUpdate);
             await _unitOfWork.Tools.UpdateAsync(toolToUpdate);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<bool>(toolToUpdate);
+            return _mapper.Map<ToolDto>(toolToUpdate);
         }
     }
 }
