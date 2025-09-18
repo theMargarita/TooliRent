@@ -9,8 +9,8 @@ namespace Services.DTOs.CategoryDto
         public string Description { get; set; } = string.Empty;
 
         //navigation property
-        public List<Tool> ToolIds { get; set; } = new List<Tool>();
-        public int ToolId { get; set; } //not sure about this one
+        //public List<Tool> Tools { get; set; } = new List<Tool>();
+        //public int ToolId { get; set; } //not sure about this one
 
     }
 }
