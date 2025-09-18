@@ -2,6 +2,7 @@
 using Domain.Core.Models;
 using Infrastructure.Models;
 using Services.DTOs;
+using Services.DTOs.CategoryDto;
 using Services.DTOs.CustomerDtos;
 using Services.DTOs.RentalDtos;
 using Services.DTOs.ToolDtos;
@@ -14,22 +15,28 @@ namespace Services.Mapping
         //entity to DTO
         public MappingProfile() 
         {
+
+            CreateMap<Category, CategoryDTO>();
+
             //mapping for tools
             CreateMap<Tool, ToolReadDto>()
                 .ForMember(dto => dto.CategoryName, option => option.MapFrom(t => t.Category.Name))
                 .ForMember(dto => dto.CategoryId, option => option.MapFrom(t => t.Category.CategoryId))
                 .ForMember(dto => dto.IsAvailable, option => option.MapFrom(a => a.QuantityInStock > 0));
+                
 
             CreateMap<ToolCreateDto, Tool>();
             CreateMap<ToolUpdateDto, Tool>();
-            CreateMap<Tool, ToolDto>();
+            CreateMap<Tool, ToolDto>()
+                .ForMember(dto => dto.CategoryName, o => o
+                .MapFrom(t => t.Category.Name));
 
             //mapping for customers
             CreateMap<Customer, CustomerReadDto>()
                 .ForMember(dto => dto.FullName, option => option.MapFrom(c => $"{c.FirstName} {c.LastName}"));
 
             CreateMap<CustomerCreateDto, CustomerReadDto>();
-            CreateMap<CustomerUpdateDto, CustomerUpdateDto>();
+            CreateMap<CustomerUpdateDto, CustomerUpdateDto>(); //need to change this
 
             // mapping for rentals
             CreateMap<Rental, RentalReadDto>()
