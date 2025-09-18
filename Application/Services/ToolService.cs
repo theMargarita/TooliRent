@@ -24,9 +24,7 @@ namespace Services.Services
             await _unitOfWork.Tools.AddAsync(tool);
             await _unitOfWork.SaveChangesAsync();
 
-            // Map the created tool back to ToolDto to return
-            var createdTool = _unitOfWork.Tools.GetByIdAsync(tool.ToolId);
-            return _mapper.Map<ToolDto>(createdTool);
+            return _mapper.Map<ToolDto>(tool);
         }
 
         public async Task<bool> DeleteToolAsync(int id)
