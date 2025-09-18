@@ -15,9 +15,6 @@ namespace Services.Mapping
         //entity to DTO
         public MappingProfile() 
         {
-
-            CreateMap<Category, CategoryDTO>();
-
             //mapping for tools
             CreateMap<Tool, ToolReadDto>()
                 .ForMember(dto => dto.CategoryName, option => option.MapFrom(t => t.Category.Name))
@@ -30,6 +27,11 @@ namespace Services.Mapping
             CreateMap<Tool, ToolDto>()
                 .ForMember(dto => dto.CategoryName, o => o
                 .MapFrom(t => t.Category.Name));
+
+            //mapping for categories
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryReadDto, Category>();
+
 
             //mapping for customers
             CreateMap<Customer, CustomerReadDto>()
