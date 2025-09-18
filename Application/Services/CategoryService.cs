@@ -22,10 +22,13 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<CategoryDTO>>(category);
         }
 
-        public Task<IEnumerable<CategoryReadDto>> GetCategoryById(int id)
+        public async Task<CategoryReadDto> GetCategoryById(int id)
         {
-            var category = _unitOfWork.Categories.GetByIdAsync(id);
-            return _mapper.Map<Task<IEnumerable<CategoryReadDto>>>(category);
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
+
+            if(category is null) return null;
+
+            return _mapper.Map<CategoryReadDto>(category);
         }
     }
 }
