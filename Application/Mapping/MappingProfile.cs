@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Core.Models;
 using Infrastructure.Models;
+using Services.DTOs;
 using Services.DTOs.CustomerDtos;
 using Services.DTOs.RentalDtos;
 using Services.DTOs.ToolDtos;
@@ -17,10 +18,11 @@ namespace Services.Mapping
             CreateMap<Tool, ToolReadDto>()
                 .ForMember(dto => dto.CategoryName, option => option.MapFrom(t => t.Category.Name))
                 .ForMember(dto => dto.CategoryId, option => option.MapFrom(t => t.Category.CategoryId))
-                .ForMember(dto => dto.IsAvailable, option => option.MapFrom(a => a.QuantityInStock > 0)); 
+                .ForMember(dto => dto.IsAvailable, option => option.MapFrom(a => a.QuantityInStock > 0));
 
             CreateMap<ToolCreateDto, Tool>();
             CreateMap<ToolUpdateDto, Tool>();
+            CreateMap<Tool, ToolDto>();
 
             //mapping for customers
             CreateMap<Customer, CustomerReadDto>()
@@ -29,12 +31,21 @@ namespace Services.Mapping
             CreateMap<CustomerCreateDto, CustomerReadDto>();
             CreateMap<CustomerUpdateDto, CustomerUpdateDto>();
 
-            //mapping for rentals
+            // mapping for rentals
             CreateMap<Rental, RentalReadDto>()
-                .ForMember(dto => dto.CustomerName, option => option.MapFrom(r => $"{r.Customer.FirstName} {r.Customer.LastName}"))
-                .ForMember(dto => dto.CustomerId, option => option.MapFrom(r => r.Customer.CustomerId))
-                .ForMember(dto => dto.RentalDetails.Select(r => r.ToolName), option => option.MapFrom(r => r.Tools))
-                .ForMember(dto => dto.RentalDetails, option => option.MapFrom(r => r.OrderDetails));
+                .ForMember(dto => dto.CustomerName, opt => opt.MapFrom(r => $"{r.Customer.FirstName} {r.Customer.LastName}"))
+                .ForMember(dto => dto.CustomerId, opt => opt.MapFrom(r => r.Customer.CustomerId))
+                .ForMember(dto => dto.RentalDetails, opt => opt.MapFrom(r => r.OrderDetails));
+
+            //mapping for rental detail
+            CreateMap<RentalDetail, RentalDetailDTO>()
+                .ForMember(dto => dto.ToolId, opt => opt.MapFrom(od => od.ToolId));
+                //.ForMember(dto => dto., opt => opt.MapFrom(od => od.tool));
+
+
+            CreateMap<RentalCreateDto, Rental>();
+            //CreateMap<RentalUpdateDto, Rental>();
+
         }
 
     }
