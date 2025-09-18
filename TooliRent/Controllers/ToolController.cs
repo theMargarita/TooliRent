@@ -66,7 +66,7 @@ namespace TooliRent.WebAPI.Controllers
 
             var updatedTool = await _toolService.UpdateToolAsync(toolUpdateDto, id);
 
-            if (!updatedTool)
+            if (updatedTool is null)
             {
                 return NotFound($"Tool with id {id} not found");
             }
