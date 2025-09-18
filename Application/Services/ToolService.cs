@@ -43,6 +43,8 @@ namespace Services.Services
         public async Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
             var tool = await _unitOfWork.Tools.GetAllAsync();
+
+
             return _mapper.Map<IEnumerable<ToolDto>>(tool);
         }
 
@@ -53,10 +55,13 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(availableTools);
         }
 
-        public Task<ToolDto> GetToolByIdAsync(int id)
+        public async Task<ToolDto> GetToolByIdAsync(int id)
         {
-            var tools = _unitOfWork.Tools.GetByIdAsync(id);
-            return _mapper.Map<Task<ToolDto>>(tools);
+            var tool = await _unitOfWork.Tools.GetByIdAsync(id);
+
+            if(tool is null) return null;
+
+            return _mapper.Map<ToolDto>(tool);
         }
 
         public async Task<IEnumerable<ToolDto>> GetToolsByPrice(decimal minPrice, decimal maxPrice)
