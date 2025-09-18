@@ -13,6 +13,6 @@ namespace Services.DTOs.ToolDtos
         [Column(TypeName = "decimal(18,2)")]
         public decimal PricePerDay { get; set; }
         public int QuantityInStock { get; set; } = 0;
-        public int Category { get; set; } 
+        public int CategoryId { get; set; } 
     }
 }
