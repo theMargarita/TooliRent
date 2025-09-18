@@ -38,7 +38,8 @@ namespace TooliRent.WebAPI.Controllers
         public async Task<ActionResult<ToolDto>> GetToolById(int id)
         {
             var tool = await _toolService.GetToolByIdAsync(id);
-            if (tool == null) return NotFound();
+
+            if (tool == null) return NotFound($"Could not find the id {id}");
 
             //else
             return Ok(tool);
