@@ -8,7 +8,7 @@
         public string CategoryName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal PricePerDay { get; set; } = 0m;
-        public int QuantityInStock { get; set; } = 0;
+        public int QuantityInStock { get; set; } 
         public bool IsAvailable => QuantityInStock > 0;
     }
 }
