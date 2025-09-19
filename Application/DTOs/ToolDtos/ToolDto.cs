@@ -16,6 +16,6 @@ namespace Services.DTOs.ToolDtos
 
         //category info
         public int CategoryId { get; init; }
-        public string CategoryName { get; init; } = string.Empty;
+        public string? CategoryName { get; init; } 
     }
 }
