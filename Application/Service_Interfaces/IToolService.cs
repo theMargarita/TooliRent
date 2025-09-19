@@ -5,7 +5,7 @@ namespace Services.Service_Interfaces
     public interface IToolService
     {
         Task<IEnumerable<ToolDto>> GetAllToolsAsync();
-        Task<ToolDto> GetToolByIdAsync(int id);
+        Task<ToolReadDto> GetToolByIdAsync(int id);
         Task<ToolDto> AddToolAsync(ToolCreateDto toolCreateDto);
         Task<ToolDto> UpdateToolAsync(ToolUpdateDto toolUpdateDto, int id);
         Task<bool> DeleteToolAsync(int id);
