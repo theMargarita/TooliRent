@@ -11,6 +11,10 @@ using Services.Mapping;
 using Services.Service_Interfaces;
 using Services.Services;
 using Services.Validators;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using TooliRent.WebAPI;
+
 //using Services.Mapping;
 
 namespace TooliRent
@@ -44,6 +48,13 @@ namespace TooliRent
 
             //AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
+
+            //dateonly converter
+            builder.Services.AddControllers()
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter("yyyy-MM-dd"));
+            });
 
             //CORS
             //builder.Services.AddCors(options =>
