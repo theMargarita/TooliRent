@@ -1,7 +1,8 @@
 ﻿namespace Services.DTOs.CustomerDtos
 {
-    public record CustomerDTO
+    public record CustomerDto
     {
+        public int CustomerId { get; init; }
         public string FirstName { get; init; } = string.Empty;
         public string LastName { get; init; } = string.Empty;
         public DateOnly? BithDate { get; init; }

@@ -54,6 +54,7 @@ namespace TooliRent.WebAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var createdTool = await _toolService.AddToolAsync(toolCreateDto);
+
             return CreatedAtAction(nameof(GetToolById), new { id = createdTool.ToolId }, createdTool);
         }
 
