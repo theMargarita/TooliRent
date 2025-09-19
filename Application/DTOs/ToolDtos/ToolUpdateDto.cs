@@ -7,7 +7,7 @@ namespace Services.DTOs.ToolDtos
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal PricePerDay { get; set; }
-        public int QuantityInStock { get; set; } = 0;
+        public int QuantityInStock { get; set; } 
         public int CategoryId { get; set; }
     }
 }

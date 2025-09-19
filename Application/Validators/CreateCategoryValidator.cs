@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Services.Validators
 {
-    public class CreateCategoryValidator : AbstractValidator<CategoryDto>
+    public class CreateCategoryValidator : AbstractValidator<CategoryDTO>
     {
         public CreateCategoryValidator()
         {

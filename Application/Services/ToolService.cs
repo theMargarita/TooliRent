@@ -24,9 +24,7 @@ namespace Services.Services
             await _unitOfWork.Tools.AddAsync(tool);
             await _unitOfWork.SaveChangesAsync();
 
-            // Map the created tool back to ToolDto to return
-            var createdTool = _unitOfWork.Tools.GetByIdAsync(tool.ToolId);
-            return _mapper.Map<ToolDto>(createdTool);
+            return _mapper.Map<ToolDto>(tool);
         }
 
         public async Task<bool> DeleteToolAsync(int id)
@@ -43,6 +41,8 @@ namespace Services.Services
         public async Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
             var tool = await _unitOfWork.Tools.GetAllAsync();
+
+
             return _mapper.Map<IEnumerable<ToolDto>>(tool);
         }
 
@@ -53,10 +53,13 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(availableTools);
         }
 
-        public Task<ToolDto> GetToolByIdAsync(int id)
+        public async Task<ToolDto> GetToolByIdAsync(int id)
         {
-            var tools = _unitOfWork.Tools.GetByIdAsync(id);
-            return _mapper.Map<Task<ToolDto>>(tools);
+            var tool = await _unitOfWork.Tools.GetByIdAsync(id);
+
+            if(tool is null) return null;
+
+            return _mapper.Map<ToolDto>(tool);
         }
 
         public async Task<IEnumerable<ToolDto>> GetToolsByPrice(decimal minPrice, decimal maxPrice)
@@ -72,15 +75,15 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<ToolDto>>(searchTool);
         }
 
-        public async Task<bool> UpdateToolAsync(ToolUpdateDto toolUpdateDto, int id)
+        public async Task<ToolDto> UpdateToolAsync(ToolUpdateDto toolUpdateDto, int id)
         {
             var toolToUpdate = await _unitOfWork.Tools.GetByIdAsync(id);
-            if (toolToUpdate is null) return false;
+            if (toolToUpdate is null) return null;
 
             _mapper.Map(toolUpdateDto, toolToUpdate);
             await _unitOfWork.Tools.UpdateAsync(toolToUpdate);
             await _unitOfWork.SaveChangesAsync();
-            return _mapper.Map<bool>(toolToUpdate);
+            return _mapper.Map<ToolDto>(toolToUpdate);
         }
     }
 }

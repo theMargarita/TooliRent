@@ -10,7 +10,7 @@ namespace Infrastructure.Repositories
         public CustomerRepository(ToolDbContext context) : base(context)
         {
         }
-        public async Task DeleteAsunc(int id)
+        public async Task DeleteAsync(int id)
         {
            var removedCustomer =  await _dbSet.FirstOrDefaultAsync(c => c.CustomerId == id);
             if (removedCustomer != null)
@@ -25,7 +25,7 @@ namespace Infrastructure.Repositories
             return customerEmail;
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomersWithOrdersAsync()
+        public async Task<IEnumerable<Customer>> GetCustomersWithAscendingOrder()
         {
             return await _dbSet
                 .Include(c => c.Rentals)

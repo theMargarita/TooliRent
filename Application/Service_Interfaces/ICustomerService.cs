@@ -4,12 +4,12 @@ namespace Services.Service_Interfaces
 {
     public interface ICustomerService
     {
-        Task<IEnumerable<CustomerDTO>> GetAllCustomersAsync();
-        Task<CustomerDTO> GetCustomerByIdAsync(int id);
-        Task<CustomerDTO>CreateCustomerAsync(CustomerCreateDto customerDTO);
-        Task<CustomerDTO> UpdateCustomerByIdAsync(int id, CustomerUpdateDto customerDTO);
-        Task<CustomerDTO> DeleteCustomerByIdAsync(int id);
-        Task<CustomerDTO> SortCustomerByNameAsync(string ascName, string descName);
-        Task<IEnumerable<CustomerDTO>> SearchCustomerAsync(string searchTerm);
+        Task<IEnumerable<CustomerDto>> GetAllCustomersAsync();
+        Task<CustomerDto> GetCustomerByIdAsync(int id);
+        Task<CustomerDto>CreateCustomerAsync(CustomerCreateDto customerDTO);
+        Task<CustomerDto> UpdateCustomerByIdAsync(int id, CustomerUpdateDto customerDTO);
+        Task<bool> DeleteCustomerByIdAsync(int id);
+        Task<CustomerDto> SortCustomerByNameAsync();
+        Task<IEnumerable<CustomerDto>> SearchCustomerAsync(string searchTerm);
     }
 }

@@ -12,7 +12,7 @@ namespace Infrastructure.Models
         public string Description { get; set; } = string.Empty;
         [Column(TypeName = "decimal(18,2)")]
         public decimal PricePerDay { get; set; } = 0m; 
-        public int QuantityInStock { get; set; } = 0;
+        public int QuantityInStock { get; set; }
         public bool IsAvailable => QuantityInStock > 0;
 
         //navigation property
