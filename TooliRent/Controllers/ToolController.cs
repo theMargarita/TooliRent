@@ -74,7 +74,7 @@ namespace TooliRent.WebAPI.Controllers
             }
 
             //else
-            return Ok(updatedTool);
+            return Ok($"This tool has now been updated: { updatedTool}");
         }
 
         [HttpDelete("{id}")]
@@ -86,7 +86,7 @@ namespace TooliRent.WebAPI.Controllers
 
             if (!result) return NotFound($"Tool with id {id} not found");
             
-            return NoContent();
+            return Ok($"Tool with id {id} has now been deleted");
         }
     }
 }
