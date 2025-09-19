@@ -11,51 +11,51 @@ namespace Services.Mapping
 {
     public class MappingProfile : Profile
     {
-        //domain model
-        //entity to DTO
-        public MappingProfile() 
+        public MappingProfile()
         {
-            //mapping for tools
+            // TOOLS
             CreateMap<Tool, ToolReadDto>()
-                .ForMember(dto => dto.CategoryName, option => option.MapFrom(t => t.Category.Name))
-                .ForMember(dto => dto.CategoryId, option => option.MapFrom(t => t.Category.CategoryId))
-                .ForMember(dto => dto.IsAvailable, option => option.MapFrom(a => a.QuantityInStock > 0));
-                
+                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(t => t.Category.Name))
+                .ForMember(dto => dto.CategoryId, opt => opt.MapFrom(t => t.Category.CategoryId))
+                .ForMember(dto => dto.IsAvailable, opt => opt.MapFrom(t => t.QuantityInStock > 0));
+
+            CreateMap<Tool, ToolDto>()
+                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(t => t.Category.Name));
 
             CreateMap<ToolCreateDto, Tool>();
             CreateMap<ToolUpdateDto, Tool>();
-            CreateMap<Tool, ToolDto>()
-                .ForMember(dto => dto.CategoryName, o => o
-                .MapFrom(t => t.Category.Name));
 
-            //mapping for categories
+
+            // CATEGORIES
+            CreateMap<Category, CategoryReadDto>();
             CreateMap<Category, CategoryDTO>();
-            CreateMap<CategoryReadDto, Category>();
+
+            //CreateMap<CategoryCreateDto, Category>();
+            //CreateMap<CategoryUpdateDto, Category>();
 
 
-            //mapping for customers
+            // CUSTOMERS
             CreateMap<Customer, CustomerReadDto>()
-                .ForMember(dto => dto.FullName, option => option.MapFrom(c => $"{c.FirstName} {c.LastName}"));
+                .ForMember(dto => dto.FullName, opt => opt.MapFrom(c => $"{c.FirstName} {c.LastName}"));
+                
 
-            CreateMap<CustomerCreateDto, CustomerReadDto>();
-            CreateMap<CustomerUpdateDto, CustomerUpdateDto>(); //need to change this
+            CreateMap<Customer, CustomerDto>();
 
-            // mapping for rentals
+            CreateMap<CustomerCreateDto, Customer>();
+            CreateMap<CustomerUpdateDto, Customer>();
+
+
+            // RENTALS
             CreateMap<Rental, RentalReadDto>()
                 .ForMember(dto => dto.CustomerName, opt => opt.MapFrom(r => $"{r.Customer.FirstName} {r.Customer.LastName}"))
                 .ForMember(dto => dto.CustomerId, opt => opt.MapFrom(r => r.Customer.CustomerId))
                 .ForMember(dto => dto.RentalDetails, opt => opt.MapFrom(r => r.OrderDetails));
 
-            //mapping for rental detail
             CreateMap<RentalDetail, RentalDetailDTO>()
                 .ForMember(dto => dto.ToolId, opt => opt.MapFrom(od => od.ToolId));
-                //.ForMember(dto => dto., opt => opt.MapFrom(od => od.tool));
-
 
             CreateMap<RentalCreateDto, Rental>();
-            //CreateMap<RentalUpdateDto, Rental>();
-
+            // CreateMap<RentalUpdateDto, Rental>(); 
         }
-
     }
 }
