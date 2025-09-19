@@ -48,13 +48,13 @@ namespace Services.Services
             return _mapper.Map<IEnumerable<CustomerDto>>(customers);
         }
 
-        public async Task<CustomerDto?> GetCustomerByIdAsync(int id)
+        public async Task<CustomerReadDto?> GetCustomerByIdAsync(int id)
         {
             var customer = await _unitOfWork.Customers.GetByIdAsync(id);
 
             if (customer is null) return null;
 
-            return _mapper.Map<CustomerDto>(customer);
+            return _mapper.Map<CustomerReadDto>(customer);
         }
 
         //will come back to this one later - need to think about it
