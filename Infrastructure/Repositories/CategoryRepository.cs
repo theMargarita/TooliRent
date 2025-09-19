@@ -13,7 +13,9 @@ namespace Infrastructure.Repositories
         }
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                .Include(c => c.Tools)
+                .ToListAsync();
         }
         public async Task<IEnumerable<Category>> GetCategoriesWithToolsAsync(string toolName)
         {

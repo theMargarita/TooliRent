@@ -16,19 +16,20 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CategoryDTO>> GetAllCategory()
+        public async Task<IEnumerable<CategoryReadDto>> GetAllCategory()
         {
             var category = await _unitOfWork.Categories.GetAllAsync();
-            return _mapper.Map<IEnumerable<CategoryDTO>>(category);
+
+            return _mapper.Map<IEnumerable<CategoryReadDto>>(category);
         }
 
-        public async Task<CategoryDTO?> GetCategoryById(int id)
+        public async Task<CategoryReadDto?> GetCategoryById(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
 
             if(category is null) return null;
 
-            return _mapper.Map<CategoryDTO>(category);
+            return _mapper.Map<CategoryReadDto>(category);
         }
     }
 }

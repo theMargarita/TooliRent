@@ -20,7 +20,9 @@ namespace Services.Mapping
                 .ForMember(dto => dto.IsAvailable, opt => opt.MapFrom(t => t.QuantityInStock > 0));
 
             CreateMap<Tool, ToolDto>()
-                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(t => t.Category.Name));
+                .ForMember(dto => dto.CategoryName, opt => opt.MapFrom(t => t.Category.Name))
+                 .ForMember(dto => dto.CategoryId, opt => opt.MapFrom(t => t.Category.CategoryId))
+                .ForMember(dto => dto.IsAvailable, opt => opt.MapFrom(t => t.QuantityInStock > 0));
 
             CreateMap<ToolCreateDto, Tool>();
             CreateMap<ToolUpdateDto, Tool>();
@@ -38,6 +40,7 @@ namespace Services.Mapping
             CreateMap<Customer, CustomerReadDto>()
                 .ForMember(dto => dto.FullName, opt => opt.MapFrom(c => $"{c.FirstName} {c.LastName}"));
                 
+
 
             CreateMap<Customer, CustomerDto>();
 
