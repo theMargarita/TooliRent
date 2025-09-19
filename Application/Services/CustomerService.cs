@@ -6,6 +6,7 @@ using Services.Service_Interfaces;
 
 namespace Services.Services
 {
+    //only for admin to use
     public class CustomerService : ICustomerService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -17,6 +18,7 @@ namespace Services.Services
             _mapper = mapper;
         }
 
+        //exept for this one maybe
         public async Task<CustomerDto> CreateCustomerAsync(CustomerCreateDto customerDTO)
         {
             var customer = _mapper.Map<Customer>(customerDTO);
@@ -39,29 +41,51 @@ namespace Services.Services
             return true;
         }
 
-        public Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
+        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync()
         {
-            throw new NotImplementedException();
+            var customers = await _unitOfWork.Customers.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<CustomerDto>>(customers);
         }
 
-        public Task<CustomerDto> GetCustomerByIdAsync(int id)
+        public async Task<CustomerDto?> GetCustomerByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var customer = await _unitOfWork.Customers.GetByIdAsync(id);
+
+            if (customer is null) return null;
+
+            return _mapper.Map<CustomerDto>(customer);
         }
 
-        public Task<IEnumerable<CustomerDto>> SearchCustomerAsync(string searchTerm)
+        //will come back to this one later - need to think about it
+        public async Task<IEnumerable<CustomerDto>> SearchCustomerAsync(string searchTerm)
         {
-            throw new NotImplementedException();
+            var customers = _unitOfWork.Customers.SearchCustomersAsync(searchTerm);
+
+            if(customers is null) return null;
+
+            return _mapper.Map<IEnumerable<CustomerDto>>(customers);
         }
 
-        public Task<CustomerDto> SortCustomerByNameAsync(string ascName, string descName)
+        //not sure if the method name is correct for the functionality
+        public async Task<CustomerDto> SortCustomerByNameAsync()
         {
-            throw new NotImplementedException();
+            var customerToSort = await _unitOfWork.Customers.GetCustomersWithAscendingOrder();
+
+            return _mapper.Map<CustomerDto>(customerToSort);
         }
 
-        public Task<CustomerDto> UpdateCustomerByIdAsync(int id, CustomerUpdateDto customerDTO)
+        public async Task<CustomerDto> UpdateCustomerByIdAsync(int id, CustomerUpdateDto customerDTO)
         {
-            throw new NotImplementedException();
+            var customerToUpdate = await _unitOfWork.Customers.GetByIdAsync(id);
+
+            if (customerToUpdate is null) return null;
+
+            _mapper.Map(customerDTO, customerToUpdate);
+            await _unitOfWork.Customers.UpdateAsync(customerToUpdate);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<CustomerDto>(customerToUpdate);
         }
     }
 }

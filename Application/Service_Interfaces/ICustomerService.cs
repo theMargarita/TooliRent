@@ -9,7 +9,7 @@ namespace Services.Service_Interfaces
         Task<CustomerDto>CreateCustomerAsync(CustomerCreateDto customerDTO);
         Task<CustomerDto> UpdateCustomerByIdAsync(int id, CustomerUpdateDto customerDTO);
         Task<bool> DeleteCustomerByIdAsync(int id);
-        Task<CustomerDto> SortCustomerByNameAsync(string ascName, string descName);
+        Task<CustomerDto> SortCustomerByNameAsync();
         Task<IEnumerable<CustomerDto>> SearchCustomerAsync(string searchTerm);
     }
 }
