@@ -36,6 +36,7 @@ namespace TooliRent
             //Servie patterns
             builder.Services.AddScoped<IToolService, ToolService>();
             builder.Services.AddScoped<IGategoryService, CategoryService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
 
             //FluentValidation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
