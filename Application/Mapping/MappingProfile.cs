@@ -39,8 +39,6 @@ namespace Services.Mapping
             // CUSTOMERS
             CreateMap<Customer, CustomerReadDto>()
                 .ForMember(dto => dto.FullName, opt => opt.MapFrom(c => $"{c.FirstName} {c.LastName}"));
-                
-
 
             CreateMap<Customer, CustomerDto>();
 
