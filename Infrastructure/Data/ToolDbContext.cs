@@ -16,6 +16,7 @@ namespace Infrastructure.Data
         public DbSet<Category> ToolCategories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<RentalDetail> RentalDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
