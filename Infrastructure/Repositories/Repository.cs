@@ -29,6 +29,10 @@ namespace Infrastructure.Repositories
             {
                 _dbSet.Remove(entity);
             }
+            else
+            {
+                throw new ArgumentException($"Entity with id {id} not found");
+            }
         }
 
         public virtual async Task<bool> ExistsAsync(int id)

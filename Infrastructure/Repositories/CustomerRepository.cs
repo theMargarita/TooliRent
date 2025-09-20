@@ -12,10 +12,14 @@ namespace Infrastructure.Repositories
         }
         public async Task DeleteAsync(int id)
         {
-           var removedCustomer =  await _dbSet.FirstOrDefaultAsync(c => c.CustomerId == id);
+            var removedCustomer = await _dbSet.FirstOrDefaultAsync(c => c.CustomerId == id);
             if (removedCustomer != null)
             {
                 _dbSet.Remove(removedCustomer);
+            }
+            else
+            {
+                throw new ArgumentException($"Customer with id {id} not found");
             }
         }
 

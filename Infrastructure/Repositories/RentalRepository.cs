@@ -14,6 +14,7 @@ namespace Infrastructure.Repositories
     {
         public RentalRepository(ToolDbContext context) : base(context) 
         { }
+
         public async Task<IEnumerable<Rental>> GetActiveRentalsAsync() 
         {
             return await _dbSet
