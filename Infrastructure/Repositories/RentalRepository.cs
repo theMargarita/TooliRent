@@ -25,8 +25,8 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<Rental>> GetRentalsByCustomerIdAsync(int customerId)
         {
             return await _dbSet
-                .Include(r => r.OrderDetails)
-                .Where(r => r.OrderDetails
+                .Include(r => r.RentalDetails)
+                .Where(r => r.RentalDetails
                 .Any(rd => rd.CustomerId == customerId))
                 .ToListAsync();
         }
@@ -34,8 +34,8 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<Rental>> GetRentalsByToolIdAsync(int toolId)
         {
             return await _dbSet
-                .Include(r => r.OrderDetails)
-                .Where(od => od.OrderDetails
+                .Include(r => r.RentalDetails)
+                .Where(od => od.RentalDetails
                 .Any(od => od.ToolId == toolId))
                 .ToListAsync();
         }
