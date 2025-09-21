@@ -14,6 +14,7 @@ namespace Infrastructure.Repositories
     {
         public RentalRepository(ToolDbContext context) : base(context) 
         { }
+
         public async Task<IEnumerable<Rental>> GetActiveRentalsAsync() 
         {
             return await _dbSet
@@ -24,24 +25,29 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<Rental>> GetRentalsByCustomerIdAsync(int customerId)
         {
             return await _dbSet
-                .Include(r => r.OrderDetails)
-                .Where(r => r.OrderDetails
-                .Any(rd => rd.CustomerId == customerId))
+                .Include(r => r.RentalDetails)
+                .Where(r => r.CustomerId == customerId)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Rental>> GetRentalsByToolIdAsync(int toolId)
         {
             return await _dbSet
-                .Include(r => r.OrderDetails)
-                .Where(od => od.OrderDetails
+                .Include(r => r.RentalDetails)
+                .Where(od => od.RentalDetails
                 .Any(od => od.ToolId == toolId))
                 .ToListAsync();
         }
 
-        public Task<IEnumerable<Rental>> GetRentalsWithDetailsAsync() //not sure what i wanted with this so leaving it unimplemented for now
+        public async Task<Rental?> GetRentalByIdWithDetailsAsync(int id) //not sure what i wanted with this so leaving it unimplemented for now
         {
-            throw new NotImplementedException(); 
+            return await _context.Rentals
+                .Include(r => r.Customer)
+                .Include(r => r.RentalDetails)
+                    //.Include(rd => rd.Tools)
+                .FirstOrDefaultAsync(r => r.RentalId == id);
+
+
         }
 
         public Task<int> GetTotalRentalsAsync()

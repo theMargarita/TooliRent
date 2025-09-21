@@ -36,13 +36,13 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsReturned")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("RentalDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("RentalDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("ReturnDate")
+                        .HasColumnType("date");
 
-                    b.Property<int>("ToolId")
+                    b.Property<int?>("ToolId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
@@ -68,9 +68,6 @@ namespace Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("PricePerDay")
                         .HasColumnType("decimal(18,2)");
 
@@ -90,7 +87,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RentalId");
 
-                    b.ToTable("RentalDetail");
+                    b.HasIndex("ToolId");
+
+                    b.ToTable("RentalDetails");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Category", b =>
@@ -258,7 +257,7 @@ namespace Infrastructure.Migrations
                             Description = "Variable speed jigsaw with orbital action",
                             Name = "Jigsaw Variable Speed",
                             PricePerDay = 16.75m,
-                            QuantityInStock = 0
+                            QuantityInStock = 5
                         },
                         new
                         {
@@ -348,7 +347,7 @@ namespace Infrastructure.Migrations
                             Description = "24-inch electric hedge trimmer with rotating handle",
                             Name = "Electric Hedge Trimmer",
                             PricePerDay = 21.50m,
-                            QuantityInStock = 0
+                            QuantityInStock = 3
                         },
                         new
                         {
@@ -393,7 +392,7 @@ namespace Infrastructure.Migrations
                             Description = "35 lb electric demolition hammer with accessories",
                             Name = "Electric Jackhammer",
                             PricePerDay = 89.99m,
-                            QuantityInStock = 0
+                            QuantityInStock = 5
                         },
                         new
                         {
@@ -657,24 +656,30 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.Tool", "Tools")
+                    b.HasOne("Infrastructure.Models.Tool", null)
                         .WithMany("Rentals")
-                        .HasForeignKey("ToolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ToolId");
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Tools");
                 });
 
             modelBuilder.Entity("Domain.Core.Models.RentalDetail", b =>
                 {
-                    b.HasOne("Domain.Core.Models.Rental", null)
-                        .WithMany("OrderDetails")
+                    b.HasOne("Domain.Core.Models.Rental", "Rental")
+                        .WithMany("RentalDetails")
                         .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Infrastructure.Models.Tool", "Tool")
+                        .WithMany()
+                        .HasForeignKey("ToolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rental");
+
+                    b.Navigation("Tool");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Tool", b =>
@@ -741,7 +746,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Core.Models.Rental", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("RentalDetails");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Category", b =>

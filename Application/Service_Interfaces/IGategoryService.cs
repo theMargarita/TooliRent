@@ -4,8 +4,8 @@ namespace Services.Service_Interfaces
 {
     public interface IGategoryService
     {
-        Task<IEnumerable<CategoryDTO>> GetAllCategory();
-        Task<CategoryDTO> GetCategoryById(int id);
+        Task<IEnumerable<CategoryReadDto>> GetAllCategory();
+        Task<CategoryReadDto> GetCategoryById(int id);
         //Task CreateCategory(CategoryDTO categoryDto); // think about it
     }
 }
