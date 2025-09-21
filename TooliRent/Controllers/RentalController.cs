@@ -5,8 +5,8 @@ using Services.Service_Interfaces;
 
 namespace TooliRent.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RentalController : ControllerBase
     {
         private readonly IRentalService _rentalService;
