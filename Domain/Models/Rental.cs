@@ -24,7 +24,7 @@ namespace Domain.Core.Models
         public Tool? Tools { get; set; }
         public int ToolId { get; set; }
 
-        public ICollection<RentalDetail> OrderDetails { get; set; } = new List<RentalDetail>();
+        public ICollection<RentalDetail> RentalDetails { get; set; } = new List<RentalDetail>();
         
     }
 }
