@@ -15,24 +15,72 @@ namespace Services.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-        }  
+        }
 
         public async Task<RentalReadDto> CreateRental(RentalCreateDto rentalCreateDto)
         {
             var rental = _mapper.Map<Rental>(rentalCreateDto);
+
+            foreach (var detailDto in rentalCreateDto.RentalDetails)
+            {
+                var tool = await _unitOfWork.Tools.GetByIdAsync(detailDto.ToolId);
+
+                // Validate tool existence
+                if (tool is null)
+                {
+                    throw new ArgumentException($"Tool with ID {detailDto.ToolId} is not found.");
+                }
+
+                // Check stock availability
+                if (tool.QuantityInStock < detailDto.Quantity)
+                {
+                    throw new ArgumentException($"Insufficient stock for tool ID {detailDto.ToolId}\n Requested: {detailDto.Quantity}\n Available: {tool.QuantityInStock}");
+                }
+
+                // Map rental detail
+                var rentalDetail = rental.RentalDetails.FirstOrDefault(d => d.ToolId == detailDto.ToolId);
+
+                if (rentalDetail is not null)
+                {
+                    rentalDetail.PricePerDay = tool.PricePerDay;
+                    rentalDetail.RentalId = rental.RentalId;
+
+                    var rentalDays = CalculatedRentalDays(rental.RentalDate, rental.ReturnDate);
+                    rentalDetail.TotalPrice = rentalDays * detailDto.Quantity * tool.PricePerDay;
+
+                    //remove rented quantity from stock
+                    tool.QuantityInStock -= detailDto.Quantity;
+                    await _unitOfWork.Tools.UpdateAsync(tool);
+                }
+            }
+
+            // Calculate total quantity and price for the rental
+            rental.TotalQuantity = rental.RentalDetails.Sum(d => d.Quantity);
+            rental.TotalPrice = rental.RentalDetails.Sum(d => d.TotalPrice);
 
             await _unitOfWork.Rentals.AddAsync(rental);
             await _unitOfWork.SaveChangesAsync();
 
             var createdRental = await _unitOfWork.Rentals.GetByIdAsync(rental.RentalId);
 
-            return _mapper.Map<RentalReadDto>(rental);
+            return _mapper.Map<RentalReadDto>(createdRental);
+        }
+
+        private int CalculatedRentalDays(DateOnly startDate, DateOnly? returnDate)
+        {
+            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
+            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
+            var endDateTime = endDate.ToDateTime(TimeOnly.MinValue);
+
+            var rentalDays = (endDateTime - startDateTime).Days;
+
+            return rentalDays == 0 ? 1 : rentalDays; // Minimum of 1 day
         }
 
         public async Task<bool> DeleteRental(int id)
         {
             var rental = await _unitOfWork.Rentals.ExistsAsync(id);
-            if (!rental)return false;
+            if (!rental) return false;
 
             await _unitOfWork.Rentals.DeleteAsync(id);
             await _unitOfWork.SaveChangesAsync();
@@ -42,7 +90,7 @@ namespace Services.Services
 
         public async Task<IEnumerable<RentalReadDto>> GetAllRentals()
         {
-            var rentals =  await _unitOfWork.Rentals.GetAllAsync();
+            var rentals = await _unitOfWork.Rentals.GetAllAsync();
 
             return _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
         }
@@ -56,7 +104,7 @@ namespace Services.Services
 
         public async Task<bool> UpdateRental(int id, RentalUpdateDto rentalUpdateDto)
         {
-            var rentalExists = await _unitOfWork.Rentals.ExistsAsync(id); 
+            var rentalExists = await _unitOfWork.Rentals.ExistsAsync(id);
 
             if (!rentalExists) return false;
 
