@@ -21,36 +21,52 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             //configure entity properties and relationships using Fluent API
+            modelBuilder.Entity<RentalDetail>(rd =>
+            {
+                rd.HasKey(x => x.Id);
+                rd.Property(x => x.Quantity).IsRequired();
+                rd.Property(x => x.PricePerDay).IsRequired();
+                rd.Property(x => x.TotalPrice).IsRequired();
+
+                rd.HasOne(x => x.Rental)
+                  .WithMany(r => r.RentalDetails) 
+                  .HasForeignKey(x => x.RentalId);
+
+                rd.HasOne(x => x.Tool)
+                  .WithMany()
+                  .HasForeignKey(x => x.ToolId);
+            });
 
             modelBuilder.Entity<Customer>(c =>
             {
                 c.HasKey(x => x.CustomerId);
                 c.Property(x => x.FirstName)
-                .IsRequired()
-                .HasMaxLength(50);
+                    .IsRequired()
+                    .HasMaxLength(50);
                 c.Property(x => x.LastName)
-                .HasMaxLength(50)
-                .IsRequired();
+                    .HasMaxLength(50)
+                    .IsRequired();
                 c.Property(x => x.Email).HasMaxLength(255).IsRequired();
                 c.Property(x => x.PhoneNumber).IsRequired();
                 c.Property(x => x.Address).HasMaxLength(500);
                 c.HasIndex(x => x.Email).IsUnique();
 
-                //navigation relationship
-                //c.HasMany(x => x.Rentals)
-                // .WithOne(r => r.)
-                // .HasForeignKey(r => r.CustomerId);
+                //relation to Rental
+                c.HasMany(x => x.Rentals)
+                 .WithOne(r => r.Customer)
+                 .HasForeignKey(r => r.CustomerId);
             });
 
             modelBuilder.Entity<Tool>(t =>
             {
+                t.HasKey(x => x.ToolId); 
                 t.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 t.Property(x => x.Description).HasMaxLength(300);
                 t.Property(x => x.PricePerDay).IsRequired();
                 t.Property(x => x.QuantityInStock).IsRequired();
 
-                //navigation relationship
                 t.HasOne(x => x.Category)
                  .WithMany(c => c.Tools)
                  .HasForeignKey(x => x.CategoryId);
@@ -58,10 +74,10 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Category>(tc =>
             {
+                tc.HasKey(x => x.CategoryId); 
                 tc.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 tc.Property(x => x.Description).HasMaxLength(500);
 
-                //navigation relationship
                 tc.HasMany(x => x.Tools)
                   .WithOne(t => t.Category)
                   .HasForeignKey(t => t.CategoryId);
@@ -69,16 +85,21 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Rental>(r =>
             {
+                r.HasKey(x => x.RentalId); 
                 r.Property(x => x.RentalDate).IsRequired();
                 r.Property(x => x.ReturnDate);
                 r.Property(x => x.IsReturned).IsRequired();
                 r.Property(x => x.TotalQuantity).IsRequired();
                 r.Property(x => x.TotalPrice).IsRequired();
 
-                //navigation relationship
-                //r.HasOne(x => x.Customer)
-                // .WithMany(c => c.Rentals)
-                // .HasForeignKey(x => x.CustomerId);
+                // LÄGG TILL dessa relationer:
+                r.HasOne(x => x.Customer)
+                 .WithMany(c => c.Rentals)
+                 .HasForeignKey(x => x.CustomerId);
+
+                r.HasMany(x => x.RentalDetails) 
+                 .WithOne(rd => rd.Rental)
+                 .HasForeignKey(rd => rd.RentalId);
             });
 
             SeedData(modelBuilder);
@@ -120,7 +141,7 @@ namespace Infrastructure.Data
                }
             );
 
-            // Seed data for your Tools class with QuantityInStock
+            // Seed tools with realistic data
             modelBuilder.Entity<Tool>().HasData(
                 // Power Tools (CategoryId = 1)
                 new Tool
@@ -156,7 +177,7 @@ namespace Infrastructure.Data
                     Name = "Jigsaw Variable Speed",
                     Description = "Variable speed jigsaw with orbital action",
                     PricePerDay = 16.75m,
-                    QuantityInStock = 0, // Out of stock
+                    QuantityInStock = 5, 
                     CategoryId = 1
                 },
                 new Tool
@@ -250,7 +271,7 @@ namespace Infrastructure.Data
                     Name = "Electric Hedge Trimmer",
                     Description = "24-inch electric hedge trimmer with rotating handle",
                     PricePerDay = 21.50m,
-                    QuantityInStock = 0, // Out of stock
+                    QuantityInStock = 3, 
                     CategoryId = 3
                 },
                 new Tool
@@ -297,7 +318,7 @@ namespace Infrastructure.Data
                     Name = "Electric Jackhammer",
                     Description = "35 lb electric demolition hammer with accessories",
                     PricePerDay = 89.99m,
-                    QuantityInStock = 0, // Out of stock
+                    QuantityInStock = 5,
                     CategoryId = 4
                 },
                 new Tool
@@ -358,8 +379,9 @@ namespace Infrastructure.Data
                 }
             );
 
-            //modelBuilder.Entity<Customer>().HasData(customers);
         }
+
+        // Automatically set UpdatedAt before saving changes
 
         //public override Task<int>SaveChangesAsync(CancellationToken cancellationToken = default)
         //{
