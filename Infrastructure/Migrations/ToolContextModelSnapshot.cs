@@ -671,7 +671,7 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Core.Models.RentalDetail", b =>
                 {
                     b.HasOne("Domain.Core.Models.Rental", null)
-                        .WithMany("OrderDetails")
+                        .WithMany("RentalDetails")
                         .HasForeignKey("RentalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -741,7 +741,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Core.Models.Rental", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("RentalDetails");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Category", b =>
