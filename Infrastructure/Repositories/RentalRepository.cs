@@ -26,8 +26,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet
                 .Include(r => r.RentalDetails)
-                .Where(r => r.RentalDetails
-                .Any(rd => rd.CustomerId == customerId))
+                .Where(r => r.CustomerId == customerId)
                 .ToListAsync();
         }
 
@@ -40,9 +39,15 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task<IEnumerable<Rental>> GetRentalsWithDetailsAsync() //not sure what i wanted with this so leaving it unimplemented for now
+        public async Task<Rental?> GetRentalByIdWithDetailsAsync(int id) //not sure what i wanted with this so leaving it unimplemented for now
         {
-            throw new NotImplementedException(); 
+            return await _context.Rentals
+                .Include(r => r.Customer)
+                .Include(r => r.RentalDetails)
+                    //.Include(rd => rd.Tools)
+                .FirstOrDefaultAsync(r => r.RentalId == id);
+
+
         }
 
         public Task<int> GetTotalRentalsAsync()
