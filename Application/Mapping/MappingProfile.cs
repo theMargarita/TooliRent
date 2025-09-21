@@ -50,7 +50,7 @@ namespace Services.Mapping
             CreateMap<Rental, RentalReadDto>()
                 .ForMember(dto => dto.CustomerName, opt => opt.MapFrom(r => $"{r.Customer.FirstName} {r.Customer.LastName}"))
                 .ForMember(dto => dto.CustomerId, opt => opt.MapFrom(r => r.Customer.CustomerId))
-                .ForMember(dto => dto.RentalDetails, opt => opt.MapFrom(r => r.OrderDetails));
+                .ForMember(dto => dto.RentalDetails, opt => opt.MapFrom(r => r.RentalDetails));
 
             CreateMap<RentalDetail, RentalDetailDTO>()
                 .ForMember(dto => dto.ToolId, opt => opt.MapFrom(od => od.ToolId));
