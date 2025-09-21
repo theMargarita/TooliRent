@@ -41,6 +41,9 @@ namespace TooliRent
             builder.Services.AddScoped<IToolService, ToolService>();
             builder.Services.AddScoped<IGategoryService, CategoryService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IRentalService, RentalService>();
+            //builder.Services.AddScoped<IAuthService, AuthService>();
+
 
             //FluentValidation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
