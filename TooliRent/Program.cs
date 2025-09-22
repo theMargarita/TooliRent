@@ -42,6 +42,11 @@ namespace TooliRent
             //FluentValidation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateToolValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCustomerValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateRentalValidator>(); 
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateRentalValidator>();
+
 
             //AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
