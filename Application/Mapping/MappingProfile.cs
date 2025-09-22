@@ -38,7 +38,7 @@ public class MappingProfile : Profile
 
         // RENTALS
         CreateMap<RentalCreateDto, Rental>()
-            .ForMember(dest => dest.RentalId, opt => opt.Ignore())
+            //.ForMember(dest => dest.RentalId, opt => opt.Ignore())
             .ForMember(dest => dest.RentalDate, opt => opt.MapFrom(src => src.StartDate))
             .ForMember(dest => dest.ReturnDate, opt => opt.MapFrom(src => src.EndDate))
             .ForMember(dest => dest.IsReturned, opt => opt.MapFrom(src => false))
@@ -56,8 +56,8 @@ public class MappingProfile : Profile
 
         // RENTAL DETAILS
         CreateMap<RentalDetailCreateDto, RentalDetail>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.RentalId, opt => opt.Ignore())
+            //.ForMember(dest => dest.Id, opt => opt.Ignore())
+            //.ForMember(dest => dest.RentalId, opt => opt.Ignore())
             .ForMember(dest => dest.PricePerDay, opt => opt.Ignore())
             .ForMember(dest => dest.TotalPrice, opt => opt.Ignore());
 
@@ -65,7 +65,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ToolName,
                       opt => opt.MapFrom(src => src.Tool != null ? src.Tool.Name : ""));
 
-        CreateMap<RentalDetail, RentalDetailDTO>()
-            .ForMember(dto => dto.ToolId, opt => opt.MapFrom(od => od.ToolId));
+        CreateMap<RentalDetail, RentalDetailDTO>();
     }
 }

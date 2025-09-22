@@ -8,7 +8,6 @@ namespace Services.DTOs.RentalDtos
         public string ToolName { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal PricePerDay { get; set; }
-        //public int TotalRentalDays { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

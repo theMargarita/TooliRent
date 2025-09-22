@@ -92,8 +92,25 @@ namespace Services.Services
         {
             var rentals = await _unitOfWork.Rentals.GetAllRentalAsync();
 
-            return _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
+            var rentalDtos = _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
+
+            foreach (var rd in rentalDtos)
+            {
+                rd.TotalRentedDays = CalculateRentalDays(rd.StartDate, rd.EndDate);
+            }
+
+            return rentalDtos;
         }
+
+        private static int CalculateRentalDays(DateOnly startDate, DateOnly? returnDate)
+        {
+            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
+
+            var rentalDays = (endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
+
+            return rentalDays <= 0 ? 1 : rentalDays;
+        }
+
 
         public async Task<RentalReadDto> GetRentalById(int id)
         {
