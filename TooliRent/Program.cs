@@ -3,16 +3,10 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Services.Mapping;
 using Services.Service_Interfaces;
 using Services.Services;
 using Services.Validators;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using TooliRent.WebAPI;
 
 //using Services.Mapping;
@@ -48,6 +42,11 @@ namespace TooliRent
             //FluentValidation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateToolValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateCustomerValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateRentalValidator>(); 
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateRentalValidator>();
+
 
             //AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));

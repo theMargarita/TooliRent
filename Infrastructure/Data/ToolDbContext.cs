@@ -92,11 +92,12 @@ namespace Infrastructure.Data
                 r.Property(x => x.TotalQuantity).IsRequired();
                 r.Property(x => x.TotalPrice).IsRequired();
 
-                // LÄGG TILL dessa relationer:
+                //relation to Customer
                 r.HasOne(x => x.Customer)
                  .WithMany(c => c.Rentals)
                  .HasForeignKey(x => x.CustomerId);
 
+                //relation to RentalDetails
                 r.HasMany(x => x.RentalDetails) 
                  .WithOne(rd => rd.Rental)
                  .HasForeignKey(rd => rd.RentalId);

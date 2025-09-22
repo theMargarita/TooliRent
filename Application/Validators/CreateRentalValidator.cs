@@ -18,7 +18,9 @@ namespace Services.Validators
                 .NotEmpty().WithMessage("Return date is required.")
                 .GreaterThan(x => x.StartDate).WithMessage("Return date must be after the rental date.");
 
-            //RuleFor(x => x.CustomerId).
+            RuleFor(x => x.CustomerId)
+                .NotEmpty().WithMessage("Customer ID is required.");
+                
         }
     }
 }

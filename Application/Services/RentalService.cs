@@ -61,7 +61,7 @@ namespace Services.Services
             await _unitOfWork.Rentals.AddAsync(rental);
             await _unitOfWork.SaveChangesAsync();
 
-            var createdRental = await _unitOfWork.Rentals.GetByIdAsync(rental.RentalId);
+            var createdRental = await _unitOfWork.Rentals.GetRentalByIdAsync(rental.RentalId);
 
             return _mapper.Map<RentalReadDto>(createdRental);
         }
@@ -90,14 +90,31 @@ namespace Services.Services
 
         public async Task<IEnumerable<RentalReadDto>> GetAllRentals()
         {
-            var rentals = await _unitOfWork.Rentals.GetAllAsync();
+            var rentals = await _unitOfWork.Rentals.GetAllRentalAsync();
 
-            return _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
+            var rentalDtos = _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
+
+            foreach (var rd in rentalDtos)
+            {
+                rd.TotalRentedDays = CalculateRentalDays(rd.StartDate, rd.EndDate);
+            }
+
+            return rentalDtos;
         }
+
+        private static int CalculateRentalDays(DateOnly startDate, DateOnly? returnDate)
+        {
+            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
+
+            var rentalDays = (endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
+
+            return rentalDays <= 0 ? 1 : rentalDays;
+        }
+
 
         public async Task<RentalReadDto> GetRentalById(int id)
         {
-            var rental = await _unitOfWork.Rentals.GetByIdAsync(id);
+            var rental = await _unitOfWork.Rentals.GetRentalByIdAsync(id);
 
             return _mapper.Map<RentalReadDto>(rental);
         }
