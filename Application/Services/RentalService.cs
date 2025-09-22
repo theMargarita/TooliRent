@@ -61,7 +61,7 @@ namespace Services.Services
             await _unitOfWork.Rentals.AddAsync(rental);
             await _unitOfWork.SaveChangesAsync();
 
-            var createdRental = await _unitOfWork.Rentals.GetByIdAsync(rental.RentalId);
+            var createdRental = await _unitOfWork.Rentals.GetRentalByIdAsync(rental.RentalId);
 
             return _mapper.Map<RentalReadDto>(createdRental);
         }
@@ -90,14 +90,14 @@ namespace Services.Services
 
         public async Task<IEnumerable<RentalReadDto>> GetAllRentals()
         {
-            var rentals = await _unitOfWork.Rentals.GetAllAsync();
+            var rentals = await _unitOfWork.Rentals.GetAllRentalAsync();
 
             return _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
         }
 
         public async Task<RentalReadDto> GetRentalById(int id)
         {
-            var rental = await _unitOfWork.Rentals.GetByIdAsync(id);
+            var rental = await _unitOfWork.Rentals.GetRentalByIdAsync(id);
 
             return _mapper.Map<RentalReadDto>(rental);
         }
