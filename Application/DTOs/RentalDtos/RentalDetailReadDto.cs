@@ -1,4 +1,6 @@
-﻿namespace Services.DTOs.RentalDtos
+﻿using Domain.Core.Models;
+
+namespace Services.DTOs.RentalDtos
 {
     public class RentalDetailReadDto
     {
@@ -6,7 +8,7 @@
         public string ToolName { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal PricePerDay { get; set; }
-        public int RentalDays { get; set; }
+        //public int TotalRentalDays { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }
