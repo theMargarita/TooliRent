@@ -24,6 +24,13 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Tool>> GetAllToolsWithCategoryAsync()
+        {
+            return await _dbSet
+                .Include(t => t.Category)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Tool>> GetToolsByCategoryAsync(string category)
         {
             return await _dbSet
@@ -39,10 +46,10 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task<int> GetTotalToolsAsync()
-        {
-            return _dbSet.CountAsync();
-        }
+        //public Task<int> GetTotalToolsAsync()
+        //{
+        //    return _dbSet.CountAsync();
+        //}
 
         public async Task<IEnumerable<Tool>> SearchToolsAsync(string searchTerm)
         {
