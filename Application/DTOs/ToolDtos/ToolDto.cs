@@ -8,7 +8,7 @@ namespace Services.DTOs.ToolDtos
         public int ToolId { get; set; }
         public string Name { get; init; } = string.Empty;
         public string Description { get; init; } = string.Empty;
-        public int StockQuantity { get; init; } 
+        public int QuantityInStock { get; init; } 
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal PricePerDay { get; init; } = 0m;

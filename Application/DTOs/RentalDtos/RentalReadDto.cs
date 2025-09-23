@@ -2,7 +2,7 @@
 {
     public class RentalReadDto
     {
-        public int Id { get; set; }
+        public int RentalId { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; } = string.Empty;
         public DateOnly StartDate { get; set; }
