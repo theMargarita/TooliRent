@@ -37,7 +37,7 @@ namespace Services.Services
                     throw new ArgumentException($"Insufficient stock for tool ID {detailDto.ToolId}\n Requested: {detailDto.Quantity}\n Available: {tool.QuantityInStock}");
                 }
 
-                // Map rental detail
+                // Update rental detail with tool info
                 var rentalDetail = rental.RentalDetails.FirstOrDefault(d => d.ToolId == detailDto.ToolId);
 
                 if (rentalDetail is not null)
@@ -61,9 +61,7 @@ namespace Services.Services
             await _unitOfWork.Rentals.AddAsync(rental);
             await _unitOfWork.SaveChangesAsync();
 
-            var createdRental = await _unitOfWork.Rentals.GetRentalByIdAsync(rental.RentalId);
-
-            return _mapper.Map<RentalReadDto>(createdRental);
+            return _mapper.Map<RentalReadDto>(rental);
         }
 
         private int CalculatedRentalDays(DateOnly startDate, DateOnly? returnDate)

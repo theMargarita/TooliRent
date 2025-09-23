@@ -10,9 +10,9 @@ namespace Services.Validators
         public CreateRentalValidator()
         {
             RuleFor(x => x.StartDate)
-               .NotEmpty().WithMessage("Rental date is required.")
-               .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
-               .WithMessage("Rental date cannot be in the future.");
+               .NotEmpty().WithMessage("Rental date is required.");
+               //.LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Today))
+               //.WithMessage("Rental date cannot be in the future.");
 
             RuleFor(x => x.EndDate)
                 .NotEmpty().WithMessage("Return date is required.")

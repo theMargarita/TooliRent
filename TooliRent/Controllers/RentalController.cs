@@ -49,7 +49,7 @@ namespace TooliRent.WebAPI.Controllers
 
             var createdRental = await _rentalService.CreateRental(rentalCreateDto);
 
-            return CreatedAtAction(nameof(GetRentalById), new { id = createdRental.Id }, createdRental);
+            return CreatedAtAction(nameof(GetRentalById), new { id = createdRental.RentalId }, createdRental);
         }
 
         // Update a rental

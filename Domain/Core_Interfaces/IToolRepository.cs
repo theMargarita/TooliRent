@@ -7,7 +7,8 @@ namespace Domain.Core.Core_Interfaces
         //Task<IEnumerable<Tool>> GetToolsWithDetailsAsync();
         Task<IEnumerable<Tool>> GetAvailableToolsAsync();
         Task<IEnumerable<Tool>> SearchToolsAsync(string searchTerm); //search by name, description, category
-        Task<int> GetTotalToolsAsync();
+        //Task<int> GetTotalToolsAsync();
+        Task<IEnumerable<Tool>> GetAllToolsWithCategoryAsync();
         Task<IEnumerable<Tool>> GetToolsByCategoryAsync(string category);
         Task<IEnumerable<Tool>> GetToolsByPriceAsync(decimal minPrice, decimal maxPrice);
         Task<bool>ExistsAsync(string name, int id);
