@@ -40,8 +40,7 @@ namespace Services.Services
 
         public async Task<IEnumerable<ToolDto>> GetAllToolsAsync()
         {
-            var tool = await _unitOfWork.Tools.GetAllAsync();
-
+            var tool = await _unitOfWork.Tools.GetAllToolsWithCategoryAsync();
 
             return _mapper.Map<IEnumerable<ToolDto>>(tool);
         }
