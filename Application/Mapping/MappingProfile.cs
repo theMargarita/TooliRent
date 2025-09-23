@@ -33,7 +33,8 @@ public class MappingProfile : Profile
         CreateMap<Customer, CustomerReadDto>()
             .ForMember(dto => dto.FullName, opt => opt.MapFrom(c => $"{c.FirstName} {c.LastName}"));
         CreateMap<Customer, CustomerDto>();
-        CreateMap<CustomerCreateDto, Customer>();
+        CreateMap<CustomerCreateDto, Customer>()
+            .ForMember(dto => dto.BirthDate, opt => opt.MapFrom(c => c.BirthDate));
         CreateMap<CustomerUpdateDto, Customer>();
 
         // RENTALS
