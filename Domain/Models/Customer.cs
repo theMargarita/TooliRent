@@ -1,5 +1,4 @@
 ﻿using Domain.Core.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
