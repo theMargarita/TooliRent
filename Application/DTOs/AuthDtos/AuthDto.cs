@@ -4,6 +4,6 @@
     {
         public record RegisterDto(string UserName,string Email,  string Password);
         public record LoginDto(string Email, string Password);
-        public record AuthResponseDto(string AccessToken);
+        public record AuthResponseDto(string AccessToken, string UserName, string Email, List<string> Roles);
     }
 }
