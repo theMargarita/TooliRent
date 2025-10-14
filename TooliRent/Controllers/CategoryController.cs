@@ -9,8 +9,8 @@ namespace TooliRent.WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IGategoryService _categoryService;
-        public CategoryController(IGategoryService categoryService) 
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService) 
         {
             _categoryService = categoryService;
         }
