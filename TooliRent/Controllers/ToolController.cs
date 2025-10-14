@@ -5,6 +5,7 @@ using Services.Service_Interfaces;
 
 namespace TooliRent.WebAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ToolController : ControllerBase
@@ -15,8 +16,7 @@ namespace TooliRent.WebAPI.Controllers
             _toolService = toolService;
         }
 
-        //this one kind of works
-        //get all tools
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
         //difference between iaction and actionresult - actionresult better for webapi and returns more clearer and specific results 
@@ -31,6 +31,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Get tool by id
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -46,6 +47,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Create a new tool
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(typeof(ToolDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,9 +60,10 @@ namespace TooliRent.WebAPI.Controllers
             return CreatedAtAction(nameof(GetToolById), new { id = createdTool.ToolId }, createdTool);
         }
 
-        // Update an existing tool
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ICollection<ToolUpdateDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateTool(int id, [FromBody] ToolUpdateDto toolUpdateDto)
         {
@@ -77,6 +80,7 @@ namespace TooliRent.WebAPI.Controllers
             return Ok($"This tool has now been updated: { updatedTool}");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.RentalDtos;
 using Services.Service_Interfaces;
 
 namespace TooliRent.WebAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RentalController : ControllerBase
@@ -16,6 +18,7 @@ namespace TooliRent.WebAPI.Controllers
             _rentalService = rentalService;
         }
 
+        [Authorize(Roles = "Admin")]
         // Get all rentals
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
@@ -29,6 +32,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Get rental by id
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,6 +44,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Create a new rental
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,6 +58,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Update a rental
+        [AllowAnonymous]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,7 +74,22 @@ namespace TooliRent.WebAPI.Controllers
             return Ok($"Your rental order with the id {id} is now updated");
         }
 
+        //[Authorize(Roles = "Admin")]
+        //[HttpPut("{id}")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<IActionResult> ReturnRental(int id, [FromBody] RentalUpdateDto rentalUpdateDto)
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    var updateResult = await _rentalService.UpdateRental(id, rentalUpdateDto);
+        //    if (!updateResult) return NotFound($"Could not find the id {id}");
+        //    return Ok($"Your rental order with the id {id} is now updated");
+        //}
+
+
         // Delete a rental
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
