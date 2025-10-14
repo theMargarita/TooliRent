@@ -13,6 +13,7 @@ using Services.Services;
 using Services.Validators;
 using System.Text;
 using TooliRent.WebAPI;
+using TooliRent.WebAPI.IdentitySeed;
 
 namespace TooliRent
 {
@@ -20,7 +21,7 @@ namespace TooliRent
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder =  WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers()
                 .AddJsonOptions(opt =>
@@ -95,7 +96,8 @@ namespace TooliRent
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwt["Issuer"],
                     ValidAudience = jwt["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ClockSkew = TimeSpan.Zero // Tar bort default 5 min grace period
                 };
             });
 
@@ -103,7 +105,6 @@ namespace TooliRent
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-
                 options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
             });
 
@@ -128,7 +129,6 @@ namespace TooliRent
             builder.Services.AddScoped<IRentalService, RentalService>();
             builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-
             // FluentValidation
             builder.Services.AddFluentValidationAutoValidation()
                             .AddFluentValidationClientsideAdapters();
@@ -136,12 +136,22 @@ namespace TooliRent
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateCustomerValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<CreateRentalValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
             // AutoMapper
             builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile));
 
-
             var app = builder.Build();
+
+            // Ensure database is created
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ToolDbContext>();
+                context.Database.EnsureCreated();
+            }
+
+            IdentityDataSeeder.SeedRolesAsync(app.Services).Wait();
 
             if (app.Environment.IsDevelopment())
             {
