@@ -2,7 +2,7 @@
 
 namespace Services.Service_Interfaces
 {
-    public interface IGategoryService
+    public interface ICategoryService
     {
         Task<IEnumerable<CategoryReadDto>> GetAllCategory();
         Task<CategoryReadDto> GetCategoryById(int id);
