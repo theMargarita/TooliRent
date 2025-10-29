@@ -166,7 +166,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<IdentityUser>().HasData(adminUser, regularUser);
 
-            var hasher = new PasswordHasher<IdentityUser>(); // // Create a hasher instance eller hashar ett lösenord
+            //var hasher = new PasswordHasher<IdentityUser>(); // Create a hasher instance eller hashar ett lösenord
 
             // assing roles to users
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
