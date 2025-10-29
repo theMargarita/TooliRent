@@ -59,7 +59,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Update a rental
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name="Update/ReturnTool")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

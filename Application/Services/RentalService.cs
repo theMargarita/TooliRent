@@ -45,7 +45,7 @@ namespace Services.Services
                     rentalDetail.PricePerDay = tool.PricePerDay;
                     rentalDetail.RentalId = rental.RentalId;
 
-                    var rentalDays = CalculatedRentalDays(rental.RentalDate, rental.ReturnDate);
+                    var rentalDays = CalculateRentalDays(rental.RentalDate, rental.ReturnDate);
                     rentalDetail.TotalPrice = rentalDays * detailDto.Quantity * tool.PricePerDay;
 
                     //remove rented quantity from stock
@@ -62,17 +62,6 @@ namespace Services.Services
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<RentalReadDto>(rental);
-        }
-
-        private int CalculatedRentalDays(DateOnly startDate, DateOnly? returnDate)
-        {
-            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
-            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-            var endDateTime = endDate.ToDateTime(TimeOnly.MinValue);
-
-            var rentalDays = (endDateTime - startDateTime).Days;
-
-            return rentalDays == 0 ? 1 : rentalDays; // Minimum of 1 day
         }
 
         public async Task<bool> DeleteRental(int id)
@@ -102,13 +91,19 @@ namespace Services.Services
 
         private static int CalculateRentalDays(DateOnly startDate, DateOnly? returnDate)
         {
+            // If no return date, assume rental is ongoing and use today+1 to ensure at least 1 day
             var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
+
+            if (endDate <= startDate)
+            {
+                throw new ArgumentException("Return date must be the same as or after the start date.");
+            }
 
             var rentalDays = (endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
 
+            // Ensure minimum of 1 day
             return rentalDays <= 0 ? 1 : rentalDays;
         }
-
 
         public async Task<RentalReadDto> GetRentalById(int id)
         {
@@ -120,6 +115,11 @@ namespace Services.Services
         public async Task<bool> UpdateRental(int id, RentalUpdateDto rentalUpdateDto)
         {
             var rentalExists = await _unitOfWork.Rentals.ExistsAsync(id);
+
+            if (rentalUpdateDto.IsReturned)
+            {
+                Console.WriteLine("Tools is now returned");
+            }
 
             if (!rentalExists) return false;
 
