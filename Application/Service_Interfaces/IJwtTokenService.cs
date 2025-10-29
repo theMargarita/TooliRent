@@ -9,6 +9,6 @@ namespace Services.Service_Interfaces
 {
     public interface IJwtTokenService
     {
-        string CreateToken(IdentityUser user, IEnumerable<string>? roles = null);
+        string CreateToken(IdentityUser user, IEnumerable<string>? roles = null, int? customerId = null);
     }
 }

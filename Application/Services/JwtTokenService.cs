@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Services.Services
 {
-    public class JwtTokenService : IJwtTokenService // fixat stavfel
+    public class JwtTokenService : IJwtTokenService 
     {
         private readonly IConfiguration _cfg;
         public JwtTokenService(IConfiguration cfg)
@@ -16,7 +16,7 @@ namespace Services.Services
             _cfg = cfg;
         }
 
-        public string CreateToken(IdentityUser user, IEnumerable<string>? roles = null)
+        public string CreateToken(IdentityUser user, IEnumerable<string>? roles = null, int? customerId = null)
         {
             var jwt = _cfg.GetSection("Jwt");
 
@@ -26,6 +26,11 @@ namespace Services.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName ?? user.Email ?? "")
             };
+
+            if (customerId.HasValue)
+            {
+                claims.Add(new Claim("customerId", customerId.Value.ToString()));
+            }
 
             if (roles is not null)
             {
