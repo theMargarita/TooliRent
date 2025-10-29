@@ -20,6 +20,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //get all customers
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(IEnumerable<CustomerDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
         {
@@ -30,8 +31,10 @@ namespace TooliRent.WebAPI.Controllers
             return Ok(customers);
         }
 
+
         //get customer by id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CustomerDto>> GetCustomerById(int id)
@@ -45,6 +48,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //create customer
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
@@ -58,6 +62,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //update customer
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CustomerDto>> UpdateCustomer(int id, CustomerUpdateDto customerUpdateDto)
@@ -73,6 +78,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //delete customer
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteCustomer(int id)

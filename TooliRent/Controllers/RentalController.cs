@@ -18,9 +18,10 @@ namespace TooliRent.WebAPI.Controllers
             _rentalService = rentalService;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[AllowAnonymous]
         // Get all rentals
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<object>>> GetAllRentals()
         {
@@ -44,8 +45,8 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Create a new rental
-        [AllowAnonymous]
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RentalCreateDto>> CreateRental([FromBody] RentalCreateDto rentalCreateDto)
@@ -58,8 +59,8 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Update a rental
-        [AllowAnonymous]
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,23 +75,9 @@ namespace TooliRent.WebAPI.Controllers
             return Ok($"Your rental order with the id {id} is now updated");
         }
 
-        //[Authorize(Roles = "Admin")]
-        //[HttpPut("{id}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<IActionResult> ReturnRental(int id, [FromBody] RentalUpdateDto rentalUpdateDto)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-        //    var updateResult = await _rentalService.UpdateRental(id, rentalUpdateDto);
-        //    if (!updateResult) return NotFound($"Could not find the id {id}");
-        //    return Ok($"Your rental order with the id {id} is now updated");
-        //}
-
-
         // Delete a rental
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteRental(int id)

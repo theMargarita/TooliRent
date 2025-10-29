@@ -83,16 +83,29 @@ namespace TooliRent.WebAPI.Controllers
                 return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
             }
 
-            var roleResult = await _userManager.AddToRoleAsync(user, "User");
+            // Assign role based on email domain
+            IdentityResult roleResult;
+            if (registerDto.Email.EndsWith("@toolirent.com", StringComparison.OrdinalIgnoreCase))
+            {
+                roleResult = await _userManager.AddToRoleAsync(user, "Admin");
+                _logger.LogInformation($"User {registerDto.Email} assigned to Admin role automatically");
+            }
+            else
+            {
+                roleResult = await _userManager.AddToRoleAsync(user, "User");
+                _logger.LogInformation($"User {registerDto.Email} assigned to User role");
+            }
+
             if (!roleResult.Succeeded)
             {
-                _logger.LogWarning($"Failed to add user {user.Id} to User role");
+                _logger.LogWarning($"Failed to add user {user.Id} to role");
             }
 
             _logger.LogInformation($"User {registerDto.Email} registered successfully");
 
             return CreatedAtAction(nameof(GetAll), new { Message = "User registered successfully", UserId = user.Id });
         }
+
 
         [HttpPost("login")]
         [AllowAnonymous]
@@ -162,5 +175,33 @@ namespace TooliRent.WebAPI.Controllers
                 Roles: roles.ToList()
                 ));
         }
+
+
+        //[HttpDelete("delete/{userId}")]
+        //[Authorize(Roles = "Admin")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(404)]
+        //public async Task<IActionResult> DeleteUser(string userId)
+        //{
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        return BadRequest(new { Error = "UserId is required" });
+        //    }
+        //    var user = await _userManager.FindByIdAsync(userId);
+        //    if (user == null)
+        //    {
+        //        return NotFound(new { Error = "User not found" });
+        //    }
+        //    var result = await _userManager.DeleteAsync(user);
+        //    if (!result.Succeeded)
+        //    {
+        //        return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
+        //    }
+        //    _logger.LogInformation($"User {user.Email} deleted by admin");
+        //    return NoContent();
+        //}
+
+
     }
 }
