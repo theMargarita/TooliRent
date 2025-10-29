@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.Service_Interfaces;
 using static Services.DTOs.AuthDtos.AuthDto;
+using Domain.Core.Core_Interfaces;
+using Infrastructure.Models;
 
 namespace TooliRent.WebAPI.Controllers
 {
@@ -14,17 +16,20 @@ namespace TooliRent.WebAPI.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AuthController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IJwtTokenService jwtTokenService,
-            ILogger<AuthController> logger)
+            ILogger<AuthController> logger,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtTokenService = jwtTokenService;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         [Authorize(Roles = "Admin")]
@@ -73,7 +78,7 @@ namespace TooliRent.WebAPI.Controllers
             {
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
-                EmailConfirmed = true // is true for simplicity otherwise false and send confirmation email
+                EmailConfirmed = true // simplicity
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -83,7 +88,7 @@ namespace TooliRent.WebAPI.Controllers
                 return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
             }
 
-            // Assign role based on email domain
+            // Assign role
             IdentityResult roleResult;
             if (registerDto.Email.EndsWith("@toolirent.com", StringComparison.OrdinalIgnoreCase))
             {
@@ -101,9 +106,27 @@ namespace TooliRent.WebAPI.Controllers
                 _logger.LogWarning($"Failed to add user {user.Id} to role");
             }
 
+            // Ensure a Customer row exists and link by email
+            var customer = await _unitOfWork.Customers.GetCustomerByEmailAsync(user.Email ?? "");
+            if (customer == null)
+            {
+                var newCustomer = new Customer
+                {
+                    FirstName = user.UserName ?? user.Email ?? "Customer",
+                    LastName = "Customer", // minimal default — consider extending RegisterDto with names
+                    Email = user.Email ?? "",
+                    PhoneNumber = "" // PhoneNumber is required in model; use empty string if not provided
+                };
+
+                await _unitOfWork.Customers.AddAsync(newCustomer);
+                await _unitOfWork.SaveChangesAsync();
+                customer = newCustomer;
+                _logger.LogInformation("Customer row created for user {Email}", user.Email);
+            }
+
             _logger.LogInformation($"User {registerDto.Email} registered successfully");
 
-            return CreatedAtAction(nameof(GetAll), new { Message = "User registered successfully", UserId = user.Id });
+            return CreatedAtAction(nameof(GetAll), new { Message = "User registered successfully", UserId = user.Id, CustomerId = customer.CustomerId });
         }
 
 
@@ -139,7 +162,11 @@ namespace TooliRent.WebAPI.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            var token = _jwtTokenService.CreateToken(user, roles);
+            // Find customer by email and include its id as claim in the JWT
+            var customer = await _unitOfWork.Customers.GetCustomerByEmailAsync(user.Email ?? "");
+            int? customerId = customer?.CustomerId;
+
+            var token = _jwtTokenService.CreateToken(user, roles, customerId);
 
             _logger.LogInformation("User {Email} logged in successfully", loginDto.Email);
 
@@ -166,7 +193,12 @@ namespace TooliRent.WebAPI.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtTokenService.CreateToken(user, roles);
+
+            // Get customer and pass id to token
+            var customer = await _unitOfWork.Customers.GetCustomerByEmailAsync(user.Email ?? "");
+            int? customerId = customer?.CustomerId;
+
+            var token = _jwtTokenService.CreateToken(user, roles, customerId);
 
             return Ok(new AuthResponseDto(
                 AccessToken: token,
@@ -175,33 +207,5 @@ namespace TooliRent.WebAPI.Controllers
                 Roles: roles.ToList()
                 ));
         }
-
-
-        //[HttpDelete("delete/{userId}")]
-        //[Authorize(Roles = "Admin")]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(400)]
-        //[ProducesResponseType(404)]
-        //public async Task<IActionResult> DeleteUser(string userId)
-        //{
-        //    if (string.IsNullOrEmpty(userId))
-        //    {
-        //        return BadRequest(new { Error = "UserId is required" });
-        //    }
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    if (user == null)
-        //    {
-        //        return NotFound(new { Error = "User not found" });
-        //    }
-        //    var result = await _userManager.DeleteAsync(user);
-        //    if (!result.Succeeded)
-        //    {
-        //        return BadRequest(new { Errors = result.Errors.Select(e => e.Description) });
-        //    }
-        //    _logger.LogInformation($"User {user.Email} deleted by admin");
-        //    return NoContent();
-        //}
-
-
     }
 }
