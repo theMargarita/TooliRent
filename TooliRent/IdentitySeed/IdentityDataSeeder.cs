@@ -4,25 +4,20 @@ namespace TooliRent.WebAPI.IdentitySeed
 {
     public class IdentityDataSeeder
     {
-        public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             // initializing custom roles
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
             string[] roleNames = { "Admin", "User" };
 
-            // crates every role if it does not exist
             foreach (var roleName in roleNames)
             {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
+                if (!await roleManager.RoleExistsAsync(roleName))
                 {
                     await roleManager.CreateAsync(new IdentityRole(roleName));
                     Console.WriteLine($"Role '{roleName}' created");
                 }
             }
-            // Create a default admin user
+
             await CreateDefaultAdminUser(userManager);
         }
 
