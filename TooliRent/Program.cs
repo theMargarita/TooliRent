@@ -145,13 +145,21 @@ namespace TooliRent
             var app = builder.Build();
 
             // Ensure database is created
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var context = scope.ServiceProvider.GetRequiredService<ToolDbContext>();
+            //    context.Database.EnsureCreated();
+            //}
+
+            //IdentityDataSeeder.SeedRolesAsync(app.Services).Wait();
+
             using (var scope = app.Services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<ToolDbContext>();
-                context.Database.EnsureCreated();
-            }
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            IdentityDataSeeder.SeedRolesAsync(app.Services).Wait();
+                IdentityDataSeeder.SeedRolesAsync(roleManager, userManager).GetAwaiter().GetResult();
+            }
 
             if (app.Environment.IsDevelopment())
             {
