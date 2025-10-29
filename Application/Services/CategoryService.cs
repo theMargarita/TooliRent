@@ -5,7 +5,7 @@ using Services.Service_Interfaces;
 
 namespace Services.Services
 {
-    public class CategoryService : IGategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

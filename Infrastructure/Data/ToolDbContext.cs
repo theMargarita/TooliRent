@@ -21,6 +21,12 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+           
+            SeedIdentityData(modelBuilder);
+        }
+
+        private void SeedIdentityData(ModelBuilder modelBuilder)
+        {
 
             //configure entity properties and relationships using Fluent API
             modelBuilder.Entity<RentalDetail>(rd =>
@@ -31,7 +37,7 @@ namespace Infrastructure.Data
                 rd.Property(x => x.TotalPrice).IsRequired();
 
                 rd.HasOne(x => x.Rental)
-                  .WithMany(r => r.RentalDetails) 
+                  .WithMany(r => r.RentalDetails)
                   .HasForeignKey(x => x.RentalId);
 
                 rd.HasOne(x => x.Tool)
@@ -61,7 +67,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Tool>(t =>
             {
-                t.HasKey(x => x.ToolId); 
+                t.HasKey(x => x.ToolId);
                 t.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 t.Property(x => x.Description).HasMaxLength(300);
                 t.Property(x => x.PricePerDay).IsRequired();
@@ -74,7 +80,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Category>(tc =>
             {
-                tc.HasKey(x => x.CategoryId); 
+                tc.HasKey(x => x.CategoryId);
                 tc.Property(x => x.Name).IsRequired().HasMaxLength(100);
                 tc.Property(x => x.Description).HasMaxLength(500);
 
@@ -85,7 +91,7 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Rental>(r =>
             {
-                r.HasKey(x => x.RentalId); 
+                r.HasKey(x => x.RentalId);
                 r.Property(x => x.RentalDate).IsRequired();
                 r.Property(x => x.ReturnDate);
                 r.Property(x => x.IsReturned).IsRequired();
@@ -98,14 +104,84 @@ namespace Infrastructure.Data
                  .HasForeignKey(x => x.CustomerId);
 
                 //relation to RentalDetails
-                r.HasMany(x => x.RentalDetails) 
+                r.HasMany(x => x.RentalDetails)
                  .WithOne(rd => rd.Rental)
                  .HasForeignKey(rd => rd.RentalId);
             });
 
             SeedData(modelBuilder);
+            SeedRoles(modelBuilder);
         }
 
+
+        private void SeedRoles(ModelBuilder modelBuilder)
+        {
+            // Seed roller
+            var adminRole = new IdentityRole
+            {
+                Id = "1",
+                Name = "Admin",
+                NormalizedName = "ADMIN",
+                ConcurrencyStamp = "STATIC-ADMIN-ROLE-CONCURRENCYSTAMP"
+            };
+
+            var userRole = new IdentityRole
+            {
+                Id = "2",
+                Name = "User",
+                NormalizedName = "USER",
+                ConcurrencyStamp = "STATIC-USER-ROLE-CONCURRENCYSTAMP"
+            };
+
+            modelBuilder.Entity<IdentityRole>().HasData(adminRole, userRole);
+
+            // Seed användare med statiska lösenordshashes
+            var adminUser = new IdentityUser
+            {
+                Id = "a1",
+                UserName = "admin@tool.local",
+                NormalizedUserName = "ADMIN@TOOL.LOCAL",
+                Email = "admin@tool.local",
+                NormalizedEmail = "ADMIN@TOOL.LOCAL",
+                EmailConfirmed = true,
+                SecurityStamp = "STATIC-ADMIN-SECURITYSTAMP",
+                ConcurrencyStamp = "STATIC-ADMIN-CONCURRENCYSTAMP",
+                // Passward: Admin123!
+                PasswordHash = "AQAAAAIAAYagAAAAEHfdPaPu3AoXt73wEtI9kk74dORAiPsgVJVbKJDfU6UNi2wjuO11LCYGHrCwUxlthQ=="
+            };
+
+            var regularUser = new IdentityUser
+            {
+                Id = "u1",
+                UserName = "user@customer.local",
+                NormalizedUserName = "USER@CUSTOMER.LOCAL",
+                Email = "user@customer.local",
+                NormalizedEmail = "USER@CUSTOMER.LOCAL",
+                EmailConfirmed = true,
+                SecurityStamp = "STATIC-USER-SECURITYSTAMP",
+                ConcurrencyStamp = "STATIC-USER-CONCURRENCYSTAMP",
+                // Passward: User123!
+                PasswordHash = "AQAAAAIAAYagAAAAEJHOQD8WJ9FhT7jFt5WPjdw+iA6FmLgQSsWA+9ranctpdC3Xy2v4vtign4B+sADe+g=="
+            };
+
+            modelBuilder.Entity<IdentityUser>().HasData(adminUser, regularUser);
+
+            //var hasher = new PasswordHasher<IdentityUser>(); // Create a hasher instance eller hashar ett lösenord
+
+            // assing roles to users
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> 
+                { 
+                    UserId = "a1", 
+                    RoleId = "1" 
+                }, // Admin -> Admin role
+                new IdentityUserRole<string> 
+                { 
+                    UserId = "u1", 
+                    RoleId = "2" 
+                }   // User -> User role  
+            );
+        }
 
         private void SeedData(ModelBuilder modelBuilder)
         {
@@ -178,7 +254,7 @@ namespace Infrastructure.Data
                     Name = "Jigsaw Variable Speed",
                     Description = "Variable speed jigsaw with orbital action",
                     PricePerDay = 16.75m,
-                    QuantityInStock = 5, 
+                    QuantityInStock = 5,
                     CategoryId = 1
                 },
                 new Tool
@@ -272,7 +348,7 @@ namespace Infrastructure.Data
                     Name = "Electric Hedge Trimmer",
                     Description = "24-inch electric hedge trimmer with rotating handle",
                     PricePerDay = 21.50m,
-                    QuantityInStock = 3, 
+                    QuantityInStock = 3,
                     CategoryId = 3
                 },
                 new Tool
@@ -381,21 +457,5 @@ namespace Infrastructure.Data
             );
 
         }
-
-        // Automatically set UpdatedAt before saving changes
-
-        //public override Task<int>SaveChangesAsync(CancellationToken cancellationToken = default)
-        //{
-        //    var entries = ChangeTracker.Entries()
-        //        .Where(e => e.Entity is Tool || e.Entity is Category || e.Entity is Customer || e.Entity is Rental)
-        //        .ToList();
-
-        //    foreach(var entry in entries)
-        //    {
-        //        ((BackingFieldAttribute)entry.Entity).UpdatedAt = DateTime.UtcNow;
-        //    }
-
-        //    return base.SaveChangesAsync(cancellationToken);
-        //}
     }
 }

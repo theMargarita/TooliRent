@@ -1,6 +1,6 @@
 ﻿namespace Services.DTOs.CustomerDtos
 {
-    public class CustomerCreateDto
+    public record CustomerCreateDto
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

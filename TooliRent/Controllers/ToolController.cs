@@ -5,6 +5,7 @@ using Services.Service_Interfaces;
 
 namespace TooliRent.WebAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ToolController : ControllerBase
@@ -15,9 +16,8 @@ namespace TooliRent.WebAPI.Controllers
             _toolService = toolService;
         }
 
-        //this one kind of works
-        //get all tools
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(IEnumerable<ToolDto>), StatusCodes.Status200OK)]
         //difference between iaction and actionresult - actionresult better for webapi and returns more clearer and specific results 
         public async Task<ActionResult<IEnumerable<ToolDto>>> GetAllTools()
@@ -31,6 +31,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Get tool by id
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,6 +48,7 @@ namespace TooliRent.WebAPI.Controllers
 
         // Create a new tool
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(ToolDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ToolDto>> CreateTool([FromBody] ToolCreateDto toolCreateDto)
@@ -58,9 +60,10 @@ namespace TooliRent.WebAPI.Controllers
             return CreatedAtAction(nameof(GetToolById), new { id = createdTool.ToolId }, createdTool);
         }
 
-        // Update an existing tool
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(ICollection<ToolUpdateDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateTool(int id, [FromBody] ToolUpdateDto toolUpdateDto)
         {
@@ -78,6 +81,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteTool(int id)

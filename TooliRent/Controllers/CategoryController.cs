@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.CategoryDto;
 using Services.Service_Interfaces;
@@ -9,13 +10,14 @@ namespace TooliRent.WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IGategoryService _categoryService;
-        public CategoryController(IGategoryService categoryService) 
+        private readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(IEnumerable<CategoryDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAllCategory()
@@ -27,6 +29,8 @@ namespace TooliRent.WebAPI.Controllers
             return Ok(categories);
         }
 
+        //[(Roles = "Admin, User")]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CategoryReadDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

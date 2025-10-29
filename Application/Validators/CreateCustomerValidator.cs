@@ -30,12 +30,12 @@ namespace Services.Validators
                 .MaximumLength(200).WithMessage("Address must not exceed 200 characters.");
 
             RuleFor(x => x.BirthDate)
-                .LessThan(DateOnly.FromDateTime(DateTime.Now)).WithMessage("Are you not a bit young to rent?")
-                .GreaterThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-18))).WithMessage("You must at least be 18 years old to rent tools.\nSafty reasons!");
+                .LessThan(DateOnly.FromDateTime(DateTime.Now)).WithMessage("Are you not a bit young to rent?");
+                //.GreaterThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-18))).WithMessage("You must at least be 18 years old to rent tools.\nSafty reasons!"); //need to fix this 
 
             // Custom rule to ensure at least one of FirstName or LastName is provided
             RuleFor(x => x).Must(c => !string.IsNullOrWhiteSpace(c.FirstName) || !string.IsNullOrWhiteSpace(c.LastName))
-                .WithMessage("At least one of First Name or Last Name must be provided.");
+                .WithMessage("Firstname or Lastname must be provided.");
 
         }
     }

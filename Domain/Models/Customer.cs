@@ -1,5 +1,4 @@
 ﻿using Domain.Core.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
@@ -10,6 +9,7 @@ namespace Infrastructure.Models
         public int CustomerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        [Range(18,100, ErrorMessage="Must be atleast be 18 or older to be able to rent tools")]
         public DateOnly? BirthDate { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }

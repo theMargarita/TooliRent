@@ -475,6 +475,22 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "STATIC-ADMIN-ROLE-CONCURRENCYSTAMP",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "STATIC-USER-ROLE-CONCURRENCYSTAMP",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -565,6 +581,40 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "STATIC-ADMIN-CONCURRENCYSTAMP",
+                            Email = "admin@tool.local",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@TOOL.LOCAL",
+                            NormalizedUserName = "ADMIN@TOOL.LOCAL",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHfdPaPu3AoXt73wEtI9kk74dORAiPsgVJVbKJDfU6UNi2wjuO11LCYGHrCwUxlthQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "STATIC-ADMIN-SECURITYSTAMP",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@tool.local"
+                        },
+                        new
+                        {
+                            Id = "u1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "STATIC-USER-CONCURRENCYSTAMP",
+                            Email = "user@customer.local",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@CUSTOMER.LOCAL",
+                            NormalizedUserName = "USER@CUSTOMER.LOCAL",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJHOQD8WJ9FhT7jFt5WPjdw+iA6FmLgQSsWA+9ranctpdC3Xy2v4vtign4B+sADe+g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "STATIC-USER-SECURITYSTAMP",
+                            TwoFactorEnabled = false,
+                            UserName = "user@customer.local"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -627,6 +677,18 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "a1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "u1",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
