@@ -116,11 +116,6 @@ namespace Services.Services
         {
             var rentalExists = await _unitOfWork.Rentals.ExistsAsync(id);
 
-            if (rentalUpdateDto.IsReturned)
-            {
-                Console.WriteLine("Tools is now returned");
-            }
-
             if (!rentalExists) return false;
 
             await _unitOfWork.Rentals.UpdateAsync(_mapper.Map<Rental>(rentalUpdateDto));
@@ -128,5 +123,46 @@ namespace Services.Services
 
             return true;
         }
+
+
+        public async Task<bool?> ReturnRental(int id)
+        {
+            var rental = await _unitOfWork.Rentals.GetRentalByIdAsync(id);
+
+            if (rental is null) return null;
+            if (rental.IsReturned) return null; // Already returned
+
+            rental.IsReturned = true;
+            rental.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
+
+            // update stock for each tool in the rental
+            foreach (var detail in rental.RentalDetails)
+            {
+                var tool = await _unitOfWork.Tools.GetByIdAsync(detail.ToolId);
+                if (tool is null)
+                {
+                    continue;
+                    //tool.QuantityInStock += detail.Quantity;
+                    //await _unitOfWork.Tools.UpdateAsync(tool);
+                }
+                tool.QuantityInStock += detail.Quantity;
+                await _unitOfWork.Tools.UpdateAsync(tool);
+            }
+
+            await _unitOfWork.Rentals.UpdateAsync(rental);
+            await _unitOfWork.SaveChangesAsync();
+
+
+            //return new ReturnRentalDto
+            //{
+            //    RentalId = rental.RentalId,
+            //    IsReturned = true,
+            //    RentedAt = rental.RentalDate,
+            //    ReturnDate = DateOnly.MinValue
+            //};
+            return true;
+        }
+
     }
 }
+
