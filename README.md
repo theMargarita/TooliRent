@@ -1,192 +1,154 @@
-# TooliRent
+# TooliRent API
 
-<details close>
-<summary>Project description</summary>
-|| Project Description ||
-  
-
+> TooliRent är ett RESTful API för uthyrning av verktyg.  
+> Systemet gör det möjligt för kunder att hyra och returnera verktyg, medan administratörer kan hantera kunder, kategorier, användare och lagersaldo.  
+> Byggt i **ASP.NET Core (.NET 8)** med **Entity Framework Core** och **Clean Architecture**.
 
 ---
-|| Architecture Overview ||
 
-The project is structured into the following main components: 
+## Project Overview
 
-## TooliRent
-Handles HTTP requests and acts as the web layer. It includes: 
+###  Architecture Overview
 
-Controllers
+TooliRent är uppdelat i flera lager för tydlig struktur och enkel vidareutveckling:
 
+#### **TooliRent (API Layer)**
+Hantera HTTP-anrop och routing.
 
-Repositories
-- Implements the repository pattern to abstract data acces (, etc.)
+**Controllers:**
+- `AuthController.cs` – Hanterar autentisering och rollhantering
+- `CategoryController.cs` – CRUD-operationer för verktygskategorier
+- `CustomerController.cs` – CRUD-operationer för kunder
+- `RentalController.cs` – Hantering av uthyrning och återlämning
+- `ToolController.cs` – CRUD-operationer för verktyg
 
-Data
-- TooliRentDb.cs: EF Core DbContext
-- SeedData.cs: Populates data with initial data
+**Repositories:**
+- Implementerar repository pattern för dataåtkomst (`ToolRepository`, `RentalRepository`, etc.)
 
-Migrations
-- Entity Framework migration tracking
-
-##Library
-Contains core models and DTOs used across the entire application:
-
-- Models: Domain entities (Category, Tool, Rental, Auth, )
-- DTOs: Input/output data transfer objects 
-
-  ## Tech Stack
-  - ASP.NET Core (.NET 8)
-  - Entity Framework Core (EF Core)
-  - MSTest (Unit testing)
-  - Swagger (API docs)
-
-</details>
-
-<details close>
-<summary>API documentation</summary>
+**Data:**
+- `TooliRentDbContext.cs` – EF Core databas-kontext
+- `SeedData.cs` – Initierar databasen med exempeldata
 
 ---
-|      | Endpoint                                           | Parameters                                                        | Description                                        |
-|------|----------------------------------------------------|-------------------------------------------------------------------|----------------------------------------------------|
-| GET  | `/api/Guest/GetAllGuests`                          |                                                                   | Gets all guests                                    |
-| GET  | `/api/Guest/AvailableRooms`                        | startDate, endDate                                                | Gets available rooms for a specific period of days |
-| PUT  | `/api/Guest/AddBreakfast`                          | BookingId                                                         | Adds breakfast to a specific booking               |
-| PUT  | `/api/Guest/CancelBooking`                         | bookingId                                                         | Cancels a specific booking                         |
-| POST | `/api/Guest/CreateGuest`                           | FirstName, LastName, Email, Phone                                 | Creates a new guest                                |
-| DEL  | `/api/Guest/DeleteGuest`                           | guestId                                                           | Deletes a guest by id                              |
-|      |                                                    |                                                                   |                                                    |
-| GET  | `/api/Management/GetAllFutureBookings`             |                                                                   | Gets all future bookings                           |
-| GET  | `/api/Management/GetBookingsGroupedByWeek`         |                                                                   | Gets future bookings grouped by week               |
-| GET  | `/api/Management/GetBookingsGroupedByMonth`        |                                                                   | Gets future bookings grouped by month              |
-| GET  | `/api/Management/GetBookingById`                   | id                                                                | Gets a booking with specific id                    |
-| GET  | `/api/Management/GetTotalPrice`                    | BookingId                                                         | Gets the total sum for a specific booking          |
-| GET  | `/api/Management/GetAvailableRoomsByDateAndGuests` | fromDate, toDate, adults, children                                | Gets available rooms by specific conditions        |
-| GET  | `/api/Management/GetBookingHistory`                |                                                                   | Gets all past bookings                             |
-| PUT  | `/api/Management/UpdateBooking`                    | Id, FromDate, ToDate, NumberOfAdults, NumberOfChildren, Breakfast | Updates a booking                                  |
-| POST | `/api/Management/CreateBooking`                    | roomId, guestId, fromDate, toDate, adults, children, breakfast    | Creates a new booking                              |
-| DEL  | `/api/Management/DeleteBooking`                    | bookingId                                                         | Deletes a booking                                  |
+
+#### **TooliRent.Library (Domain & DTO Layer)**
+Innehåller kärnmodeller och Data Transfer Objects.
+
+- **Models:**  
+  `Tool`, `Category`, `Customer`, `Rental`, `RentalDetail`, `User`
+- **DTOs:**  
+  `ToolDto`, `CategoryDto`, `CustomerDto`, `RentalDto`, `ReturnRentalDto`, `AuthDto`
+
 ---
-<details close>
-<summary>See all guests</summary>
-<br>
-  
+
+#### **TooliRent.Tests (Testing Layer)**
+Innehåller enhetstester och integrationstester.
+
+- **Unit Tests:** Testar controllers med mockade repositories  
+- **Repository Tests:** Körs mot en InMemory-databas  
+- **Integration Tests:** Verifierar hela flöden via Postman
+
+---
+
+### Tech Stack
+
+| Teknologi | Beskrivning |
+|------------|-------------|
+| ASP.NET Core (.NET 8) | Backend API |
+| Entity Framework Core | ORM och databasåtkomst |
+| PostgreSQL / MSSQL | Databas |
+| MSTest | Enhetstester |
+| Swagger | API-dokumentation |
+| Postman | Integrationstester |
+
+---
+
+## 📡 API Endpoints
+
+| Metod | Endpoint | Beskrivning |
+|--------|-----------|-------------|
+| **Auth** | | |
+| `POST` | `/api/Auth/Register` | Registrera en ny användare |
+| `POST` | `/api/Auth/Login` | Logga in och hämta JWT-token |
+| `GET` | `/api/Auth/GetAllUsers` | Hämta alla användare (Admin) |
+| **Categories** | | |
+| `GET` | `/api/Category/GetAllCategory` | Hämta alla kategorier |
+| `POST` | `/api/Category/AddCategory` | Skapa ny kategori |
+| `PUT` | `/api/Category/UpdateCategory` | Uppdatera kategori |
+| `DELETE` | `/api/Category/DeleteCategory/{id}` | Ta bort kategori |
+| **Tools** | | |
+| `GET` | `/api/Tool/GetAllTools` | Hämta alla verktyg |
+| `GET` | `/api/Tool/GetToolById/{id}` | Hämta specifikt verktyg |
+| `POST` | `/api/Tool/AddTool` | Lägg till nytt verktyg |
+| `PUT` | `/api/Tool/UpdateTool` | Uppdatera verktyg |
+| `DELETE` | `/api/Tool/DeleteTool/{id}` | Ta bort verktyg |
+| **Customers** | | |
+| `GET` | `/api/Customer/GetAllCustomer` | Hämta alla kunder |
+| `GET` | `/api/Customer/GetCustomerById/{id}` | Hämta kund via ID |
+| `POST` | `/api/Customer/AddCustomer` | Lägg till kund |
+| `PUT` | `/api/Customer/UpdateCustomer` | Uppdatera kund |
+| `DELETE` | `/api/Customer/DeleteCustomer/{id}` | Ta bort kund |
+| **Rentals** | | |
+| `POST` | `/api/Rental/CreateRental` | Skapa ny uthyrning |
+| `GET` | `/api/Rental/GetAllRentals` | Hämta alla uthyrningar |
+| `GET` | `/api/Rental/GetRentalById/{id}` | Hämta specifik uthyrning |
+| `PATCH` | `/api/Rental/{id}/return` | Returnera en uthyrning (Admin) |
+
+---
+
+## 📦 Example Requests & Responses
+
+### 🔑 Register User
+```http
+POST /api/Auth/Register
+
 ````
 [GET] /api/Guest/GetAllGuests
 ````
-**Request URL**
-````
-https://localhost:7072/api/Guest/GetAllGuests
-````
 
-**Example Response**
-````
-[
-   # Gotlandsrussen
-
-<details close>
-<summary>Project description</summary>
-|| Project Description ||
-  
-Gotlandsrussen is a RESTful hotel booking API built using ASP.NET Core (.NET 8). It simulates a full booking flow, allowing guests to; Book, Update, Cancel and Query available rooms. They can also calculate prises based on date and guest count. The API supports both guest and administrative endpoints. 
-
-This project was developed by a team of code students for a school assignment. Focus was on clean architecture and data validation using both MSTest and Postman for flow validation. 
-
----
-|| Architecture Overview ||
-
-The project is structured into the following main components: 
-
-## GotlandsrussenAPI
-Handles HTTP requests and acts as the web layer. It includes: 
-
-Controllers
-- GuestController.cs: Endpoints for guests (create booking, cancel bookings, etc.)
-- ManagementController.cs: Admin operations (view bookings, update booking, etc.)
-
-Repositories
-- Implements the repository pattern to abstract data acces (BookingRepository, RoomRepository, etc.)
-
-Data
-- HotelDbContext.cs: EF Core DbContext
-- SeedData.cs: Populates data with initial data
-
-Migrations
-- Entity Framework migration tracking
-
-## HotelGotlandsrussenLIBRARY
-Contains core models and DTOs used across the entire application:
-
-- Models: Domain entities (Booking, Room, RoomType, Guest)
-- DTOs: Input/output data transfer objects (UpdateBookingDto, RoomDto, etc.)
-
-## HotelGotlandsRussenTESTS
-Handles automated unit testing using MSTest: 
-
-- TestSetup: Base setup for shared tests objects
-- Tests: Contains all controller and repository test files
-
-## Functional Flow (Postman)
-A full end-to-end test suite was created using Postman. 
-It covers following: 
-
-- Create a new guest
-- Create booking (with or without breakfast)
-- Add Breakfast to a booking
-- Update Booking
-- Cancel a booking
-- Get total price
-- Check available rooms by dates and guests
-- Delete guest and booking
-
-  ## Tech Stack
-  - ASP.NET Core (.NET 8)
-  - Entity Framework Core (EF Core)
-  - PostgreSQL
-  - MSTest (Unit testing)
-  - Swagger (API docs)
-  - Postman (Integration testing)
-
-</details>
-
-<details close>
-<summary>API documentation</summary>
-
----
-|      | Endpoint                                           | Parameters                                                        | Description                                        |
-|------|----------------------------------------------------|-------------------------------------------------------------------|----------------------------------------------------|
-| GET  | `/api/Guest/GetAllGuests`                          |                                                                   | Gets all guests                                    |
-| GET  | `/api/Guest/AvailableRooms`                        | startDate, endDate                                                | Gets available rooms for a specific period of days |
-| PUT  | `/api/Guest/AddBreakfast`                          | BookingId                                                         | Adds breakfast to a specific booking               |
-| PUT  | `/api/Guest/CancelBooking`                         | bookingId                                                         | Cancels a specific booking                         |
-| POST | `/api/Guest/CreateGuest`                           | FirstName, LastName, Email, Phone                                 | Creates a new guest                                |
-| DEL  | `/api/Guest/DeleteGuest`                           | guestId                                                           | Deletes a guest by id                              |
-|      |                                                    |                                                                   |                                                    |
-| GET  | `/api/Management/GetAllFutureBookings`             |                                                                   | Gets all future bookings                           |
-| GET  | `/api/Management/GetBookingsGroupedByWeek`         |                                                                   | Gets future bookings grouped by week               |
-| GET  | `/api/Management/GetBookingsGroupedByMonth`        |                                                                   | Gets future bookings grouped by month              |
-| GET  | `/api/Management/GetBookingById`                   | id                                                                | Gets a booking with specific id                    |
-| GET  | `/api/Management/GetTotalPrice`                    | BookingId                                                         | Gets the total sum for a specific booking          |
-| GET  | `/api/Management/GetAvailableRoomsByDateAndGuests` | fromDate, toDate, adults, children                                | Gets available rooms by specific conditions        |
-| GET  | `/api/Management/GetBookingHistory`                |                                                                   | Gets all past bookings                             |
-| PUT  | `/api/Management/UpdateBooking`                    | Id, FromDate, ToDate, NumberOfAdults, NumberOfChildren, Breakfast | Updates a booking                                  |
-| POST | `/api/Management/CreateBooking`                    | roomId, guestId, fromDate, toDate, adults, children, breakfast    | Creates a new booking                              |
-| DEL  | `/api/Management/DeleteBooking`                    | bookingId                                                         | Deletes a booking                                  |
----
-<details close>
-<summary>See all guests</summary>
-<br>
-  
 ````
 [GET] /api/Category/GetAllCategory
 ````
-**Request URL**
-````
-https://localhost:7072/api/Category/GetAllCategory
-````
+[
+  {
+    "id": "24a23575-4f55-4af0-98e8-9bf4eba2906f",
+    "userName": "marvar",
+    "email": "marvar@toolirent.com",
+    "roles": [
+      "Admin"
+    ]
+  },
+  {
+    "id": "a4c5b12c-f747-4e40-b1d9-16136ef93f00",
+    "userName": "fibiebibi",
+    "email": "fibie@user.com",
+    "roles": [
+      "User"
+    ]
+  },
+  {
+    "id": "cdc1d2e3-e75f-42a9-a55f-a81ebf809b1d",
+    "userName": "marfar",
+    "email": "marfar@something.com",
+    "roles": [
+      "User"
+    ]
+  },
+  {
+    "id": "d417d33c-2190-4cfb-b2ad-204efb70a944",
+    "userName": "admin",
+    "email": "admin@toolirent.com",
+    "roles": [
+      "Admin"
+    ]
+  }
+]
 
-**Example Response**
+</details>
+````
+[GET] /api/Category/GetAllCategory
 ````
 [
-   [
   {
     "categoryId": 1,
     "name": "Power Tools",
@@ -213,8 +175,6 @@ https://localhost:7072/api/Category/GetAllCategory
     "description": "Professional cleaning tools and pressure washing equipment"
   }
 ]
-
-]
 ````
 </details>
 
@@ -225,22 +185,16 @@ https://localhost:7072/api/Category/GetAllCategory
 ````
 [GET] /api/Tool/GetAllTools
 ````
-**Example Request URL**
-````
-https://localhost:7047/api/Guest/available-rooms?startDate=2025-08-01&endDate=2025-08-03
-````
-
 **Example Response**
 ````
 [
-   [
-  {
+{
     "toolId": 1,
     "name": "Cordless Drill 18V",
     "description": "Professional 18V cordless drill with two batteries and charger",
-    "quantityInStock": 3,
+    "quantityInStock": 0,
     "pricePerDay": 15.99,
-    "isAvailable": true,
+    "isAvailable": false,
     "categoryId": 1,
     "categoryName": "Power Tools"
   },
@@ -248,9 +202,9 @@ https://localhost:7047/api/Guest/available-rooms?startDate=2025-08-01&endDate=20
     "toolId": 2,
     "name": "Circular Saw 7.25\"",
     "description": "Heavy duty circular saw with carbide blade",
-    "quantityInStock": 2,
+    "quantityInStock": 0,
     "pricePerDay": 22.5,
-    "isAvailable": true,
+    "isAvailable": false,
     "categoryId": 1,
     "categoryName": "Power Tools"
   },
@@ -264,7 +218,106 @@ https://localhost:7047/api/Guest/available-rooms?startDate=2025-08-01&endDate=20
     "categoryId": 1,
     "categoryName": "Power Tools"
   },
-... 12
+  {
+    "toolId": 4,
+    "name": "Jigsaw Variable Speed",
+    "description": "Variable speed jigsaw with orbital action",
+    "quantityInStock": 3,
+    "pricePerDay": 16.75,
+    "isAvailable": true,
+    "categoryId": 1,
+    "categoryName": "Power Tools"
+  },
+  {
+    "toolId": 5,
+    "name": "Impact Driver",
+    "description": "High torque impact driver with quick-change chuck",
+    "quantityInStock": 5,
+    "pricePerDay": 19.99,
+    "isAvailable": true,
+    "categoryId": 1,
+    "categoryName": "Power Tools"
+  },
+  {
+    "toolId": 6,
+    "name": "Orbital Sander",
+    "description": "Random orbital sander with dust collection",
+    "quantityInStock": 2,
+    "pricePerDay": 24.99,
+    "isAvailable": true,
+    "categoryId": 1,
+    "categoryName": "Power Tools"
+  },
+  {
+    "toolId": 7,
+    "name": "Professional Hammer Set",
+    "description": "3-piece hammer set: claw, ball peen, and sledge",
+    "quantityInStock": 6,
+    "pricePerDay": 8.5,
+    "isAvailable": true,
+    "categoryId": 2,
+    "categoryName": "Hand Tools"
+  },
+  {
+    "toolId": 8,
+    "name": "Socket Wrench Set",
+    "description": "42-piece metric and imperial socket set with ratchets",
+    "quantityInStock": 3,
+    "pricePerDay": 12.99,
+    "isAvailable": true,
+    "categoryId": 2,
+    "categoryName": "Hand Tools"
+  },
+  {
+    "toolId": 9,
+    "name": "Precision Screwdriver Set",
+    "description": "20-piece precision screwdriver set with magnetic tips",
+    "quantityInStock": 8,
+    "pricePerDay": 6.75,
+    "isAvailable": true,
+    "categoryId": 2,
+    "categoryName": "Hand Tools"
+  },
+  {
+    "toolId": 10,
+    "name": "Professional Tool Box",
+    "description": "Large tool box with multiple compartments and wheels",
+    "quantityInStock": 1,
+    "pricePerDay": 14.5,
+    "isAvailable": true,
+    "categoryId": 2,
+    "categoryName": "Hand Tools"
+  },
+  {
+    "toolId": 11,
+    "name": "Adjustable Wrench Set",
+    "description": "4-piece adjustable wrench set (6\", 8\", 10\", 12\")",
+    "quantityInStock": 4,
+    "pricePerDay": 9.99,
+    "isAvailable": true,
+    "categoryId": 2,
+    "categoryName": "Hand Tools"
+  },
+  {
+    "toolId": 12,
+    "name": "Self-Propelled Lawn Mower",
+    "description": "21-inch self-propelled gas lawn mower with mulching capability",
+    "quantityInStock": 2,
+    "pricePerDay": 35.99,
+    "isAvailable": true,
+    "categoryId": 3,
+    "categoryName": "Garden Tools"
+  },
+  {
+    "toolId": 13,
+    "name": "Gas Leaf Blower",
+    "description": "Powerful gas-powered leaf blower with variable speed",
+    "quantityInStock": 3,
+    "pricePerDay": 24.99,
+    "isAvailable": true,
+    "categoryId": 3,
+    "categoryName": "Garden Tools"
+  },
 ]
 ````
 </details>
@@ -274,11 +327,30 @@ https://localhost:7047/api/Guest/available-rooms?startDate=2025-08-01&endDate=20
 <br>
   
 ````
-[PUT] /api/
+[GET] /api/Customer/GetAllCustomer
 ````
 **Example Request URL**
 ````
-
+[
+  {
+    "customerId": 1,
+    "firstName": "Marmar",
+    "lastName": "Varvar",
+    "birthDate": "1998-10-29",
+    "email": "marvar@something.com",
+    "phoneNumber": "+9757647474",
+    "address": "Somewhere in space 42"
+  },
+  {
+    "customerId": 2,
+    "firstName": "Margo",
+    "lastName": "Fargo",
+    "birthDate": "2005-10-29",
+    "email": "marfar@something.com",
+    "phoneNumber": "+987953846",
+    "address": "Somewhere over the mountains 11"
+  }
+]
 ````
 **Example Response**
 ````
@@ -378,7 +450,7 @@ https://localhost:7047/api/Management/GetAllFutureBookings
         "bookedFromDate": "2025-06-11",
         "bookedToDate": "2025-06-13",
         "numberOfAdults": 1,
-        "numberOfChildren": 0
+        "numberOfChildren": 0Get All Customer 
     }
 ]
 
@@ -498,10 +570,7 @@ https://localhost:7047/api/Management/GetTotalPrice?BookingId=3
 ````
 [GET] /api/Management/GetAvailableRoomByDateAndGuests
 ````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/GetAvailableRoomByDateAndGuests?fromDate=2025-09-12&toDate=2025-09-15&adults=2&children=2
-````
+
 
 **Example Response**
 ````
@@ -518,10 +587,7 @@ https://localhost:7047/api/Management/GetAvailableRoomByDateAndGuests?fromDate=2
 ````
 [GET] /api/Management/GetBookingHistory
 ````
-**Request URL**
-````
-https://localhost:7047/api/Management/GetBookingHistory
-````
+
 
 **Example Response**
 ````
@@ -539,10 +605,6 @@ https://localhost:7047/api/Management/GetBookingHistory
 ````
 [PUT] /api/Management/UpdateBooking
 ````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/UpdateBooking?Id=4&FromDate=2026-08-17&ToDate=2026-08-18&NumberOfAdults=2&NumberOfChildren=0&Breakfast=true
-````
 
 **Example Response**
 ````
@@ -557,10 +619,7 @@ https://localhost:7047/api/Management/UpdateBooking?Id=4&FromDate=2026-08-17&ToD
 ````
 [POST] /api/Management/CreateBooking
 ````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/CreateBooking?roomId=8&guestId=9&fromDate=2027-08-10&toDate=2027-08-13&adults=2&children=0&breakfast=true
-````
+
 
 **Example Response**
 ````
@@ -575,10 +634,7 @@ https://localhost:7047/api/Management/CreateBooking?roomId=8&guestId=9&fromDate=
 ````
 [DEL] /api/Management/DeleteBooking
 ````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/DeleteBooking?bookingId=5
-````
+
 
 **Example Response**
 ````
