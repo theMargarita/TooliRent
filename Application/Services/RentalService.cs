@@ -92,11 +92,13 @@ namespace Services.Services
         private static int CalculateRentalDays(DateOnly startDate, DateOnly? returnDate)
         {
             // If no return date, assume rental is ongoing and use today+1 to ensure at least 1 day
-            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today).AddDays(1);
+            var endDate = returnDate ?? DateOnly.FromDateTime(DateTime.Today); //.AddDays(1);
 
-            if (endDate <= startDate)
+            if (endDate < startDate)
             {
-                throw new ArgumentException("Return date must be the same as or after the start date.");
+                //throw new ArgumentException("Return date must be the same as or after the start date.");
+                //return Math.Abs((endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days);
+                return 0;
             }
 
             var rentalDays = (endDate.ToDateTime(TimeOnly.MinValue) - startDate.ToDateTime(TimeOnly.MinValue)).Days;
@@ -125,12 +127,13 @@ namespace Services.Services
         }
 
 
-        public async Task<bool?> ReturnRental(int id)
+        public async Task<bool> ReturnRental(int id)
         {
             var rental = await _unitOfWork.Rentals.GetRentalByIdAsync(id);
 
-            if (rental is null) return null;
-            if (rental.IsReturned) return null; // Already returned
+            if (rental is null) return false;
+
+            if (rental.IsReturned) return false; // Already returned
 
             rental.IsReturned = true;
             rental.ReturnDate = DateOnly.FromDateTime(DateTime.Now);
@@ -163,6 +166,26 @@ namespace Services.Services
             return true;
         }
 
+
+        public async Task<IEnumerable<RentalReadDto>> GetActiveRentals()
+        {
+             var rentals = await _unitOfWork.Rentals.GetActiveRentalsAsync();
+
+            if (rentals is null || !rentals.Any())
+            {
+                return Enumerable.Empty<RentalReadDto>();
+            }
+
+            var dto = _mapper.Map<IEnumerable<RentalReadDto>>(rentals);
+
+            foreach(var d in dto)
+            {
+                d.TotalRentedDays = CalculateRentalDays(d.StartDate, d.EndDate);
+            }
+
+            return dto;
+        }
     }
+
 }
 
