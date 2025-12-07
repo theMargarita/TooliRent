@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    public class Category
+    public record Category
     {
         [Key]
         public int CategoryId { get; set; }
