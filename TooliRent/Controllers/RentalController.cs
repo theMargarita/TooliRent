@@ -21,7 +21,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //[AllowAnonymous]
         // Get all rentals
-        [HttpGet]
+        [HttpGet("RentalHistory")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<object>>> GetAllRentals()
@@ -31,6 +31,19 @@ namespace TooliRent.WebAPI.Controllers
             if (rentals == null || !rentals.Any()) return NotFound("No was rentals found.");
 
             return Ok(rentals);
+        }
+
+        [HttpGet("GetActiveRentals")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveRentals()
+        {
+            var activeRentals = await _rentalService.GetActiveRentals();
+
+            if (activeRentals == null || !activeRentals.Any()) return NotFound("No active rentals found.");
+
+            return Ok(activeRentals);
         }
 
         // Get rental by id
