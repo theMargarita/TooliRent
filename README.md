@@ -98,16 +98,14 @@ Innehåller enhetstester och integrationstester.
 
 ## 📦 Example Requests & Responses
 
-### 🔑 Register User
+### 🔑 Register User && Login
 ```http
 POST /api/Auth/Register
+POST /api/Auth/Login
+````
+<details close>
 
-````
-[GET] /api/Guest/GetAllGuests
-````
-
-````
-[GET] /api/Category/GetAllCategory
+[GET] /api/Auth/GetAll
 ````
 [
   {
@@ -143,6 +141,25 @@ POST /api/Auth/Register
     ]
   }
 ]
+````
+</details>
+
+<details close>
+<summary>Add Auth</summary>
+<br>
+  
+[POST] /api/Auth
+````
+**Example Request URL**
+````
+{
+  "userName": "string",
+  "email": "string",
+  "password": "string"
+}
+````
+</details>
+
 
 </details>
 ````
@@ -179,7 +196,7 @@ POST /api/Auth/Register
 </details>
 
 <details close>
-<summary>See available rooms</summary>
+<summary>Get all tools</summary>
 <br>
   
 ````
@@ -323,7 +340,7 @@ POST /api/Auth/Register
 </details>
 
 <details close>
-<summary>Add breakfast to a booking</summary>
+<summary>Get all customers</summary>
 <br>
   
 ````
@@ -352,475 +369,91 @@ POST /api/Auth/Register
   }
 ]
 ````
-**Example Response**
-````
-{
-}
-````
-
-</details>
-
 <details close>
-<summary>Cancel a booking</summary>
+<summary>Add Customer</summary>
 <br>
   
 ````
-[PUT] /api/Guest/CancelBooking
+[POST] /api/Customer
 ````
 **Example Request URL**
 ````
-
-````
-
-**Example Response**
-````
 {
-    "message": "Booking is cancelled"
-}
-
-````
-</details>
-
-<details close>
-<summary>Add a guest</summary>
-<br>
-  
-````
-[POST] /api/Guest/CreateGuest
-````
-**Example Request URL**
-````
-
-````
-
-**Example Response**
-````
-{
-  "id": 23,
-  "firstName": "Test",
-  "lastName": "Testsson",
-  "email": "test@testmail.com",
-  "phone": "555-444333",
-  "bookings": null
+    "message": "Customer now created"
 }
 ````
 </details>
 
 
-<details close>
-<summary>Delete a guest</summary>
-<br>
-  
-````
-[DEL] /api/Guest/DeleteGuest
-````
-**Example Request URL**
-````
-https://localhost:7047/api/Guest/DeleteGuest?guestId=5
-````
-
-**Example Response**
-````
-No response body
-````
 </details>
 
 <details close>
-<summary>See all future bookings</summary>
+<summary>Active rentals</summary>
 <br>
   
 ````
-[GET] /api/Management/GetAllFutureBookings
+[Get] /api/Rental/GetActiveRentals
 ````
-
-**Request URL**
-````
-https://localhost:7047/api/Management/GetAllFutureBookings
-````
-
-**Example Response**
+**Example Request URL**
 ````
 [
-    {
-        "id": 3,
-        "guestName": "Larsson, Tom",
-        "roomNames": [
-            "103"
-        ],
-        "bookedFromDate": "2025-06-11",
-        "bookedToDate": "2025-06-13",
-        "numberOfAdults": 1,
-        "numberOfChildren": 0Get All Customer 
-    }
-]
-
-````
-</details>
-
-<details close>
-<summary>See all future bookings grouped by week</summary>
-<br>
-  
-````
-[GET] /api/Management/GetBookingsGroupedByWeek
-````
-**Request URL**
-````
-https://localhost:7047/api/Management/GetBookingsGroupedByWeek
-````
-
-**Example Response**
-````
-[
-    {
-        "year": 2025,
-        "week": 25,
-        "bookings": [
-            {
-                "id": 4,
-                "guestName": "Helgesson, Lisa",
-                "roomNames": [
-                    "106"
-                ],
-                "bookedFromDate": "2025-06-20",
-                "bookedToDate": "2025-06-25",
-                "numberOfAdults": 1,
-                "numberOfChildren": 0
-            },
-            {
-                "id": 7,
-                "guestName": "Johansson, Oscar",
-                "roomNames": [
-                    "109"
-                ],
-                "bookedFromDate": "2025-06-16",
-                "bookedToDate": "2025-06-18",
-                "numberOfAdults": 2,
-                "numberOfChildren": 0
-            }
-        ]
-    }
+ {
+    "rentalId": 4,
+    "customerId": 4,
+    "customerName": "",
+    "startDate": "2025-10-30",
+    "endDate": "2025-10-31",
+    "totalRentedDays": 1,
+    "rentalDetails": []
+  },
+  {
+    "rentalId": 5,
+    "customerId": 3,
+    "customerName": "",
+    "startDate": "2025-11-11",
+    "endDate": "2025-11-14",
+    "totalRentedDays": 3,
+    "rentalDetails": []
+  },
+  {
+    "rentalId": 6,
+    "customerId": 3,
+    "customerName": "",
+    "startDate": "2025-10-30",
+    "endDate": "2025-11-14",
+    "totalRentedDays": 15,
+    "rentalDetails": []
+  }
 ]
 ````
-</details>
-
-<details close>
-<summary>See all future bookings grouped by month</summary>
-<br>
-  
-````
-[GET] /api//
-````
-**Request URL**
-````
-https://localhost:7047/api//
-````
-
-**Example Response**
-````
-[
-
-]
-   
 
 ````
-</details>
-
-<details close>
-<summary>Get a booking by id</summary>
-<br>
-  
+[Delete] /api/Rental/{id}
 ````
-[GET] /api/Management/GetBookingById
-````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/GetBookingById?id=10
-````
-
-**Example Response**
-````
-
-
-````
-</details>
-
-<details close>
-<summary>See the total price for a booking</summary>
-<br>
-  
-````
-[GET] /api/Management/GetTotalPrice?BookingId=3
-````
-**Example Request URL**
-````
-https://localhost:7047/api/Management/GetTotalPrice?BookingId=3
-````
-
-**Example Response**
-````
-
-````
-</details>
-
-<details close>
-<summary>See available rooms by date and number of guests</summary>
-<br>
-  
-````
-[GET] /api/Management/GetAvailableRoomByDateAndGuests
-````
-
-
-**Example Response**
-````
- 
-
-````
-</details>
-
-
-<details close>
-<summary>See the booking history</summary>
-<br>
-  
-````
-[GET] /api/Management/GetBookingHistory
-````
-
-
-**Example Response**
-````
-[
- 
-]
-
-````
-</details>
-
-<details close>
-<summary>Update a booking</summary>
-<br>
-  
-````
-[PUT] /api/Management/UpdateBooking
-````
-
-**Example Response**
-````
-
-````
-</details>
-
-<details close>
-<summary>Create a new booking</summary>
-<br>
-  
-````
-[POST] /api/Management/CreateBooking
-````
-
-
-**Example Response**
-````
-
-````
-</details>
-
-<details close>
-<summary>Delete a booking</summary>
-<br>
-  
-````
-[DEL] /api/Management/DeleteBooking
-````
-
-
-**Example Response**
-````
-No response body
-````
-</details>
-</details>
-
-<details close>
-<summary>Test strategy</summary>
-  
----
-  
-### Unit Tests for Controller
-To test our controllers, we used Moq to mock dependencies from the repository classes. We could simulate various scenarios and ensure that the appropriate HTTP responses were returned.
-
----
-### Unit Tests for Repositories
-For repository testing we used an in-memory database (InMemoryDatabase from Entity Framework). This allowed us to verify data database communication without depending on a real database.
-
----
-### Integration Tests
-For integration testing we used Postman by sending real HTTP requests to the API. This helped us verify that all endpoints worked as expected, including correct status codes, response bodies, and error handling. We used Postman to test full flows, such as creating bookings, finding available rooms, and cancelling bookings.
-
----
-### Test Results
-A few bugs were detected during testing. One example is that breakfast costs were included in the total booking amount, even when the customer had chosen to book without breakfast. These bugs were corrected during the testing phase.
-
-We do not have full test coverage for all methods, mainly due to time constraints. Several new methods were added toward the end of the project, and we did not have enough time to implement tests for all of them. However, all members of the project group contributed to writing both controller and repository tests, and we prioritized testing our initial methods.
-
-
-</details>
-
-]
-````
-</details>
-
-<details close>
-<summary>something here </summary>
-<br>
-  
-````
-[GET] /api/Guest/GetAvailableRooms
-````
-**Example Request URL**
-````
-
-````
-
-**Example Response**
-````
-
-````
-</details>
-
-<details close>
-<summary>Add </summary>
-<br>
-  
-````
-[PUT] /api/Guest/AddBreakfast
-````
-**Example Request URL**
-````
-
-````
-**Example Response**
-````
-
-````
-
-</details>
-
-<details close>
-<summary>  </summary>
-<br>
-  
-````
-[PUT] /api/Guest/CancelBooking
-````
-**Example Request URL**
-````
-https://localhost:7047/api/Guest/CancelBooking?bookingId=10
-````
-
 **Example Response**
 ````
 {
-    "message": "Booking is cancelled"
+    "message": "The rentals is  now deleted"
 }
 
 ````
 </details>
 
 <details close>
-<summary>Add </summary>
+<summary>Add Customer</summary>
 <br>
   
 ````
-[POST] /api/
+[POST] /api/Customer
 ````
 **Example Request URL**
 ````
-
-````
-
-**Example Response**
-````
-
+{
+    "message": "Customer now created"
+}
 ````
 </details>
 
 
-<details close>
-<summary>Delete </summary>
-<br>
-  
-````
-[DEL] /api/
-````
-**Example Request URL**
-````
-
-````
-
-**Example Response**
-````
-No response body
-````
-</details>
-
-<details close>
-<summary>  </summary>
-<br>
-  
-````
-[GET] /api/
-````
-
-**Request URL**
-````
-
-````
-
-**Example Response**
-````
-
-
-````
-</details>
-
-<details close>
-<summary>  </summary>
-<br>
-  
-````
-[GET] /api/
-````
-**Request URL**
-````
-
-````
-
-**Example Response**
-````
-
-````
-</details>
-
-<details close>
-<summary>  </summary>
-<br>
-  
-````
-[GET] /api/
-````
-**Request URL**
-````
-
-````
-
-**Example Response**
-````
-
-
-````
-</details>
 
 
