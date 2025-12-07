@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.RentalDtos;
@@ -20,7 +21,7 @@ namespace TooliRent.WebAPI.Controllers
 
         //[AllowAnonymous]
         // Get all rentals
-        [HttpGet]
+        [HttpGet("RentalHistory")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<object>>> GetAllRentals()
@@ -30,6 +31,19 @@ namespace TooliRent.WebAPI.Controllers
             if (rentals == null || !rentals.Any()) return NotFound("No was rentals found.");
 
             return Ok(rentals);
+        }
+
+        [HttpGet("GetActiveRentals")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(IEnumerable<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<object>>> GetActiveRentals()
+        {
+            var activeRentals = await _rentalService.GetActiveRentals();
+
+            if (activeRentals == null || !activeRentals.Any()) return NotFound("No active rentals found.");
+
+            return Ok(activeRentals);
         }
 
         // Get rental by id
@@ -59,7 +73,7 @@ namespace TooliRent.WebAPI.Controllers
         }
 
         // Update a rental
-        [HttpPut("{id}", Name="Update/ReturnTool")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -73,6 +87,20 @@ namespace TooliRent.WebAPI.Controllers
             if (!updateResult) return NotFound($"Could not find the id {id}");
 
             return Ok($"Your rental order with the id {id} is now updated");
+        }
+
+        // Return a rental
+        [HttpPut("{id}/return")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ReturnRental(int id)
+        {
+            var returnResult = await _rentalService.ReturnRental(id);
+
+            if (!returnResult) return NotFound($"Could not find the id {id}");
+       
+            return Ok($"Your rental order with the id {id} is now returned");
         }
 
         // Delete a rental

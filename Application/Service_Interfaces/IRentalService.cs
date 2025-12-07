@@ -9,5 +9,7 @@ namespace Services.Service_Interfaces
         Task<RentalReadDto> CreateRental(RentalCreateDto rentalCreateDto);
         Task<bool> UpdateRental(int id, RentalUpdateDto rentalUpdateDto);
         Task<bool> DeleteRental(int id);
+        Task<bool> ReturnRental(int id);
+        Task<IEnumerable<RentalReadDto>> GetActiveRentals();
     }
 }

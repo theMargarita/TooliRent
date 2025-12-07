@@ -9,5 +9,6 @@ namespace Domain.Core.Core_Interfaces
         Task<int> GetTotalRentalsAsync();
         Task<IEnumerable<Rental>> GetActiveRentalsAsync();
         Task<IEnumerable<Rental>> GetRentalsByCustomerIdAsync(int customerId);
+        //Task<IEnumerable<Rental>> GetOverdueRentalsAsync(DateOnly currentDate); // Rentals not returned by due date
     }
 }

@@ -55,10 +55,15 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.StartDate, opt => opt.MapFrom(r => r.RentalDate))
             .ForMember(dto => dto.EndDate, opt => opt.MapFrom(r => r.ReturnDate));
 
+        CreateMap<Rental, RentalUpdateDto>().ForMember(dest => dest.NewReturnDate,
+                                                  opt => opt.MapFrom(src => src.RentalDate));
+        CreateMap<Rental, ReturnRentalDto>()
+            .ForMember(r => r.RentedAt, opt => opt.MapFrom(src => src.RentalDate))
+            .ForMember(r => r.ReturnDate, o => o.MapFrom(s => s.ReturnDate));
+            //.ForMember(r => r.IsReturned == true, o => o.MapFrom(s => s.TotalQuantity));
+
         // RENTAL DETAILS
         CreateMap<RentalDetailCreateDto, RentalDetail>()
-            //.ForMember(dest => dest.Id, opt => opt.Ignore())
-            //.ForMember(dest => dest.RentalId, opt => opt.Ignore())
             .ForMember(dest => dest.PricePerDay, opt => opt.Ignore())
             .ForMember(dest => dest.TotalPrice, opt => opt.Ignore());
 
